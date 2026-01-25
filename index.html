@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Verification Report - Project Meridian</title>
+    <!-- Using Tailwind for layout only, enforcing a strict academic look -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Force Academic Aesthetics */
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            color: #000;
+            line-height: 1.6;
+        }
+        h1, h2, h3, h4 {
+            font-weight: bold;
+            color: #1a202c;
+        }
+        .mono {
+            font-family: 'Courier New', Courier, monospace;
+        }
+        a { text-decoration: underline; color: #0000EE; }
+        
+        /* Print styling to ensure it looks like a paper when printed */
+        @media print {
+            body { font-size: 11pt; }
+            button { display: none; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body class="bg-white py-12 px-4 sm:px-8">
+
+    <div class="max-w-4xl mx-auto">
+
+        <!-- Header / Letterhead -->
+        <header class="border-b-2 border-black pb-6 mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6">
+            <div>
+                <!-- Logo -->
+                <img src="logo.jpeg" 
+                     alt="MBW Services" 
+                     class="h-16 w-auto mb-4 object-contain"
+                     onerror="this.style.display='none';">
+                
+                <h1 class="text-3xl uppercase tracking-wide mb-1">Project Meridian</h1>
+                <p class="text-lg italic text-gray-700">Tunable Plasmonic-Optomechanical Catalyst (TPOC)</p>
+            </div>
+            <div class="text-left sm:text-right text-sm">
+                <p><strong>Date:</strong> January 19, 2026</p>
+                <p><strong>Status:</strong> TRL 3 (Analytical Verification)</p>
+                <p><strong>PI:</strong> Matthew Walker</p>
+            </div>
+        </header>
+
+        <!-- Abstract -->
+        <section class="mb-10 px-4 sm:px-12">
+            <h2 class="text-sm font-bold uppercase border-b border-gray-300 mb-3 pb-1">Abstract</h2>
+            
+            <p class="text-justify mb-4">
+                <strong>Context:</strong> Project Meridian aims to develop a Tunable Plasmonic-Optomechanical Catalyst (TPOC) for converting concentrated solar energy into liquid hydrocarbon fuels. Current architectures suffer from a fundamental <em>"Simulation Paradox"</em>: the high temperatures (>280°C) required for chemical kinetics typically cause thermal instability and catalyst degradation.
+            </p>
+
+            <p class="text-justify mb-4">
+                <strong>Verification Scope:</strong> This report documents the analytical verification of a Refractory HfN/ZrN Superlattice designed to resolve this paradox. Utilizing <strong>MACE-MP</strong> (Machine Learning Force Fields) and <strong>Phonopy</strong>, we validated a 20.2 meV phonon bandgap capable of blocking Klemens decay channels. Crucially, simulations identified a catastrophic thermal leakage mode at the solid interface (Sim 2-A), which was resolved via a structural pivot to Mesoporous Black Titania (50% porosity). The data below details the negative results that forced these design changes and the subsequent validation of the corrected architecture.
+            </p>
+
+            <div class="text-sm bg-gray-100 p-2 border border-gray-300 inline-block no-print">
+                <strong>Note to Reviewer:</strong> This page serves as a digital summary of the full TRL 3 verification dataset.
+                <button onclick="window.print()" class="ml-4 underline text-blue-800 cursor-pointer hover:text-blue-600">[Print Report to PDF]</button>
+            </div>
+        </section>
+
+        <!-- 1.0 Optical & Thermal Physics -->
+        <section class="mb-12">
+            <h2 class="text-xl border-b border-black mb-6 pb-2 uppercase">1.0 Optical & Thermal Physics</h2>
+            
+            <div class="mb-8 pl-4">
+                <h3 class="font-bold text-lg mb-2">1.1 Phonon Dispersion & Bandgap Analysis</h3>
+                <p class="mb-2"><strong>Methodology:</strong> MACE-MP & Phonopy. Calculated for Hafnium Nitride (HfN).</p>
+                <ul class="list-disc ml-6 mb-3 space-y-1">
+                    <li>Max Acoustic Frequency: <span class="mono">6.03 THz</span></li>
+                    <li>Min Optical Frequency: <span class="mono">10.91 THz</span></li>
+                    <li>Phonon Bandgap: <span class="mono">20.20 meV</span></li>
+                </ul>
+                <p class="font-bold text-green-800">[PASS] Phonon Bottleneck Confirmed.</p>
+            </div>
+
+            <div class="mb-8 pl-4">
+                <h3 class="font-bold text-lg mb-2">1.2 Interface Physics (The Pivot)</h3>
+                <p class="mb-2"><strong>Methodology:</strong> EOS Sweep & Gibson-Ashby Effective Medium Theory.</p>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse border border-gray-400 mb-3">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="border border-gray-400 p-2 text-sm">Test Condition</th>
+                                <th class="border border-gray-400 p-2 text-sm">Result</th>
+                                <th class="border border-gray-400 p-2 text-sm">Conclusion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="border border-gray-400 p-2">Solid Rutile TiO₂</td>
+                                <td class="border border-gray-400 p-2 mono">12.8% Reflection</td>
+                                <td class="border border-gray-400 p-2 font-bold text-red-800">[FAIL] Thermal Bridge</td>
+                            </tr>
+                            <tr>
+                                <td class="border border-gray-400 p-2"><strong>Mesoporous Foam (50%)</strong></td>
+                                <td class="border border-gray-400 p-2 mono"><strong>72.5% Reflection</strong></td>
+                                <td class="border border-gray-400 p-2 font-bold text-green-800">[PASS] Thermal Mirror</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2.0 Chemical Catalysis -->
+        <section class="mb-12">
+            <h2 class="text-xl border-b border-black mb-6 pb-2 uppercase">2.0 Chemical Catalysis & Kinetics</h2>
+            <div class="pl-4">
+                <h3 class="font-bold text-lg mb-2">2.1 Catalyst Sintering (LSW Simulation)</h3>
+                <p class="mb-2"><strong>Hypothesis:</strong> Bare Cobalt will sinter rapidly at 280°C.</p>
+                <p class="mb-2"><strong>Result:</strong> Max Particle Size <span class="mono">4.65 nm</span> (Limit 10.0 nm).</p>
+                <p class="font-bold text-green-800">[STABLE] Encapsulation is NOT required for thermal stability.</p>
+            </div>
+        </section>
+
+        <!-- 3.0 Mechanical Engineering -->
+        <section class="mb-12">
+            <h2 class="text-xl border-b border-black mb-6 pb-2 uppercase">3.0 Mechanical Engineering</h2>
+            
+            <div class="mb-8 pl-4">
+                <h3 class="font-bold text-lg mb-2">3.1 Steric Confinement (Wax Clogging)</h3>
+                <p class="mb-2"><strong>Methodology:</strong> Anderson-Schulz-Flory (Monte Carlo).</p>
+                <ul class="list-disc ml-6 mb-3 space-y-1">
+                    <li>Open Surface: <span class="font-bold text-red-800">13.6% Wax Fraction (FAIL)</span></li>
+                    <li>1.0 nm Pore: <span class="font-bold text-green-800">0.0% Wax Fraction (PASS)</span></li>
+                </ul>
+            </div>
+
+            <div class="pl-4">
+                <h3 class="font-bold text-lg mb-2">3.2 MEMS Thermal Stability</h3>
+                <p class="mb-2"><strong>Objective:</strong> Stabilize optical cavity against 338 nm thermal drift.</p>
+                <table class="w-full text-left border-collapse border border-gray-400 mb-3">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="border border-gray-400 p-2 text-sm">Control Method</th>
+                            <th class="border border-gray-400 p-2 text-sm">Outcome</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border border-gray-400 p-2">Gap-Closing Actuator</td>
+                            <td class="border border-gray-400 p-2 text-red-800 font-bold">[FAIL] "Snap-In" Collapse at 3.25V</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-400 p-2">Lateral Comb Drive</td>
+                            <td class="border border-gray-400 p-2 text-green-800 font-bold">[PASS] Linear Lock (2.3 nm error)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 4.0 Yield Model -->
+        <section class="mb-12">
+            <h2 class="text-xl border-b border-black mb-6 pb-2 uppercase">4.0 Integrated Yield Model</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 pl-4">
+                <div class="border p-4 border-gray-300">
+                    <h4 class="font-bold uppercase text-xs mb-2">Scenario A: Baseline</h4>
+                    <p class="text-3xl font-bold mb-1">26.7%</p>
+                    <p class="text-sm italic">Solar-to-Chemical Efficiency</p>
+                    <p class="text-sm mt-2">Achieved at 3.7x Solar Concentration.</p>
+                </div>
+                <div class="border p-4 border-gray-300">
+                    <h4 class="font-bold uppercase text-xs mb-2">Scenario B: Design Limit</h4>
+                    <p class="text-3xl font-bold mb-1">711,595</p>
+                    <p class="text-sm italic">Gallons / Year / 100m²</p>
+                    <p class="text-sm mt-2">At 500x Concentration (500 kW/m²).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5.0 Limitations -->
+        <section class="mb-16 bg-gray-50 border-l-4 border-black p-4">
+            <h3 class="font-bold text-lg mb-2">5.0 Limitations & Next Steps</h3>
+            <p class="mb-2">This verification campaign is strictly limited to <strong>TRL 3 (Analytical Verification)</strong>.</p>
+            <ol class="list-decimal ml-6 space-y-1">
+                <li><strong>Experimental Validation:</strong> Phonon mean free path requires confirmation via Time-Domain Thermoreflectance (TDTR).</li>
+                <li><strong>Next Phase:</strong> Project is positioned for TRL 4 (Breadboard) validation.</li>
+            </ol>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-xs text-gray-500 border-t border-gray-300 pt-6 mt-12">
+            <p class="font-bold text-black mb-1">CONFIDENTIAL & PROPRIETARY</p>
+            <p>Copyright © 2026 Matthew Walker. All rights reserved.</p>
+            <p class="mt-2">Contact: contact@projectmeridian.energy</p>
+        </footer>
+
+    </div>
+</body>
+</html>
