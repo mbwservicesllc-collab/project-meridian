@@ -450,7 +450,7 @@ const earthMesh=new THREE.Mesh(
   new THREE.SphereGeometry(0.9,32,32),
   new THREE.MeshPhongMaterial({map:makeEarthTex(),emissive:0x000d1a,shininess:22,specular:0x224488})
 );
-earthMesh.position.set(4.5, 0, 0);
+earthMesh.position.set(-5, 4, -14);
 scene.add(earthMesh);
 
 const earthAtmoMat=new THREE.SpriteMaterial({map:makeSmoothGlowTex(),color:0x3366ff,transparent:true,opacity:0.4,blending:THREE.AdditiveBlending,depthWrite:false});
