@@ -450,12 +450,12 @@ const earthMesh=new THREE.Mesh(
   new THREE.SphereGeometry(0.9,32,32),
   new THREE.MeshPhongMaterial({map:makeEarthTex(),emissive:0x000d1a,shininess:22,specular:0x224488})
 );
-earthMesh.position.set(-16, 13, 20);
+earthMesh.position.set(4.5, 0, 0);
 scene.add(earthMesh);
 
 const earthAtmoMat=new THREE.SpriteMaterial({map:makeSmoothGlowTex(),color:0x3366ff,transparent:true,opacity:0.4,blending:THREE.AdditiveBlending,depthWrite:false});
 const earthAtmo=new THREE.Sprite(earthAtmoMat);
-earthAtmo.scale.set(4.5,4.5,1);
+earthAtmo.scale.set(2.8,2.8,1);
 earthMesh.add(earthAtmo);
 
 const moonMesh=new THREE.Mesh(
@@ -1180,8 +1180,8 @@ function animate(){
   } else {
     moonMesh.position.set(
       earthMesh.position.x+2.2,
-      earthMesh.position.y+0.3,
-      earthMesh.position.z+0.5
+      earthMesh.position.y+0.1,
+      earthMesh.position.z+0.4
     );
     const artFrac=Math.min(1,Math.max(0,artemisDistFromEarthKm/EARTH_MOON_KM));
     artemisMesh.position.lerpVectors(earthMesh.position,moonMesh.position,artFrac);
