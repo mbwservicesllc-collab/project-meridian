@@ -22,6 +22,30 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 }
 .h-title{font-family:'Orbitron',sans-serif;font-size:clamp(13px,3.5vw,22px);font-weight:900;color:#00d4ff;letter-spacing:.06em;line-height:1.2;text-shadow:0 0 24px rgba(0,212,255,.6);text-transform:uppercase;}
 .h-sub{font-size:clamp(9px,2.2vw,12px);color:rgba(232,244,253,.42);letter-spacing:.08em;margin-top:2px;text-transform:uppercase;}
+.h-hero{font-size:clamp(11px,2.6vw,15px);color:rgba(255,220,100,.82);margin-top:5px;letter-spacing:.02em;font-weight:600;}
+
+/* ── WELCOME OVERLAY ─────────────────────── */
+#welcome{
+  position:fixed;inset:0;z-index:250;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:rgba(3,7,18,.82);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  transition:opacity .5s;cursor:pointer;
+}
+#welcome.gone{opacity:0;pointer-events:none;}
+.wc-emoji{font-size:clamp(52px,12vw,80px);margin-bottom:18px;animation:wbob 2s ease-in-out infinite;}
+@keyframes wbob{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+.wc-title{font-family:'Orbitron',sans-serif;font-size:clamp(16px,4vw,26px);font-weight:900;color:#00d4ff;letter-spacing:.08em;text-align:center;text-shadow:0 0 24px rgba(0,212,255,.6);margin-bottom:12px;}
+.wc-sub{font-size:clamp(14px,3.5vw,18px);color:rgba(232,244,253,.75);text-align:center;max-width:320px;line-height:1.6;margin-bottom:28px;}
+.wc-tap{
+  font-family:'Orbitron',sans-serif;font-size:clamp(11px,2.5vw,14px);
+  color:#030712;background:#00d4ff;
+  padding:12px 28px;border-radius:30px;letter-spacing:.12em;
+  font-weight:700;animation:wpulse 1.8s ease-in-out infinite;
+}
+@keyframes wpulse{0%,100%{box-shadow:0 0 0 0 rgba(0,212,255,.5);}70%{box-shadow:0 0 0 14px rgba(0,212,255,0);}}
+.wc-finger{font-size:clamp(28px,7vw,44px);margin-bottom:10px;animation:wfinger 1.4s ease-in-out infinite;}
+@keyframes wfinger{0%,100%{transform:scale(1) rotate(-10deg);}50%{transform:scale(1.18) rotate(10deg);}}
 
 /* ── DESKTOP LEGEND ──────────────────────── */
 #legend{position:fixed;left:12px;top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:4px;}
@@ -89,7 +113,6 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 #panel{
   position:fixed;right:-110vw;z-index:50;
   transition:right .42s cubic-bezier(.16,1,.3,1),bottom .42s cubic-bezier(.16,1,.3,1);
-  /* Desktop */
   top:50%;transform:translateY(-50%);
   width:340px;max-height:88vh;
   overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(0,212,255,.3) transparent;
@@ -129,7 +152,6 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   #drawer{display:block;}
   #drawer-overlay{display:block;}
 
-  /* Panel anchors to bottom sheet on mobile */
   #panel{
     top:auto;transform:none;
     width:calc(100vw - 0px);left:0;right:0;
@@ -140,20 +162,17 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   #panel.open{right:0;bottom:0;}
   .pi{border-radius:16px 16px 0 0;padding:18px 16px 80px;}
 
-  /* Pull-tab indicator — swipeable */
   .pi::before{
     content:'';display:block;width:40px;height:4px;
     background:rgba(255,255,255,.2);border-radius:2px;
     margin:0 auto 16px;
     cursor:grab;
   }
-  /* Swipe grab zone sits over the pull-tab area */
   #swipe-zone{
     display:block;position:absolute;top:0;left:0;right:60px;height:36px;
     z-index:10;cursor:grab;border-radius:16px 0 0 0;
   }
 
-  /* Controls shift left to avoid drawer tab */
   #ctrls{left:auto;right:14px;transform:none;flex-direction:column;align-items:flex-end;bottom:14px;gap:6px;}
 
   #hint{display:none;}
@@ -170,10 +189,19 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 
 <div id="loader"><div class="lo">INITIALIZING MERIDIAN</div><div class="lb"><div class="lp"></div></div></div>
 
+<!-- Welcome overlay -->
+<div id="welcome">
+  <div class="wc-finger">👆</div>
+  <div class="wc-title">Welcome to<br>Project Meridian</div>
+  <div class="wc-sub">A machine that turns sunlight &amp; CO₂ into clean fuel — tap any glowing layer to learn how it works!</div>
+  <div class="wc-tap">TAP ANYWHERE TO EXPLORE</div>
+</div>
+
 <div id="header">
   <div>
     <div class="h-title">Project Meridian</div>
     <div class="h-sub">TPOC · Tunable Plasmonic-Optomechanical Catalyst</div>
+    <div class="h-hero">A machine that turns sunlight &amp; CO₂ into clean fuel ✨</div>
   </div>
 </div>
 
@@ -194,6 +222,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 </div>
 
 <div id="hint">DRAG TO ORBIT · SCROLL TO ZOOM · TAP A LAYER</div>
+<div id="artemis-hud" style="position:fixed;bottom:52px;left:50%;transform:translateX(-50%);z-index:50;font-family:'Orbitron',sans-serif;font-size:clamp(8px,1.8vw,11px);color:rgba(136,204,255,.7);letter-spacing:.1em;pointer-events:none;white-space:nowrap;text-align:center;">🚀 Artemis II · fetching live position…</div>
 
 <div id="ctrls">
   <button class="btn" id="xbtn">⚡ EXPLODE</button>
@@ -217,42 +246,42 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 <script>
 const LAYERS=[
   {name:"🪞 Plasmonic Cavity",funName:"Optical Concentrator",hex:'#e69c24',c3:0xe69c24,em:0x3a1e00,h:.2,emoji:"🪞",tex:'plasmonic',
-   desc:"This wavy surface acts like a microscopic magnifying glass. It traps the invisible heat rays from the sun (near-infrared light) and focuses them to power the reactor. The wavy shape stops light from bouncing away.",
+   desc:"This wavy surface acts like a microscopic magnifying glass. It traps the invisible heat rays from the sun (near-infrared light) and focuses them to power the reactor. The wavy shape stops light from bouncing away.<br><br><span style='color:#ffffaa;'><strong>What you're seeing:</strong> Pale yellow dots falling downward. These are the photons dropping in from the sun to power the system.</span>",
    sci:"Tunable 10.71 THz resonance | Captures light particles to supercharge electrons in the layers below.",
    fact:"☀️ When sunlight hits this special surface just right, the light waves and electrons sync up and move together, kind of like a crowd doing the wave in a stadium!"},
   {name:"⚙️ MEMS Comb Drives",funName:"Electrostatic Actuators",hex:'#98b0c4',c3:0x98b0c4,em:0x070910,h:.15,emoji:"⚙️",tex:'mems_comb',
-   desc:"These are tiny mechanical motors with interlocking teeth, looking a lot like two hair combs sliding together. They use static electricity to physically move the layers and keep everything perfectly lined up, even as the machine gets incredibly hot.",
+   desc:"These are tiny mechanical motors with interlocking teeth, looking a lot like two hair combs sliding together. They use static electricity to physically move the layers and keep everything perfectly lined up, even as the machine gets incredibly hot.<br><br><span style='color:#98b0c4;'><strong>What you're seeing:</strong> No particles. This is a purely mechanical layer, so nothing flows through it.</span>",
    sci:"Speed: 102.7 rad/s | Keeps parts aligned within 0.5 nanometers at 280°C (536°F).",
    fact:"⚙️ Keeping things aligned to 0.5 nanometers at that heat is like keeping a massive steel bridge from expanding more than the width of a single atom on a hot summer day."},
   {name:"🌱 Nano-Peapods",funName:"Catalytic Nanostructures",hex:'#32c979',c3:0x32c979,em:0x002010,h:.18,emoji:"🌱",tex:'peapods',
-   desc:"This layer looks like tiny green peas packed inside a pod. The 'peas' are tiny clusters of cobalt and iron metals. Carbon dioxide (CO₂) gets trapped in the pod, and the metal peas act like molecular scissors to easily snip the tough CO₂ molecules apart.",
+   desc:"This layer looks like tiny green peas packed inside a pod. The 'peas' are tiny clusters of cobalt and iron metals. Carbon dioxide (CO₂) gets trapped in the pod, and the metal peas act like molecular scissors to easily snip the tough CO₂ molecules apart.<br><br><span style='color:#44ff88;'><strong>What you're seeing:</strong> Green dots drifting inward from both sides and disappearing at the center. This is the CO₂ gas flowing in and getting trapped in the pores.</span>",
    sci:"Co-Fe / TiO₂ peapods | Pore size: 1.0 nm | Uses 'nitrogen vacancies' (empty parking spots) to trap CO₂.",
    fact:"🌱 The 1.0-nanometer pores act like a physical filter. They are so narrow that they physically stop the fuel molecules from growing too long and turning into a thick, waxy clog."},
   {name:"🏭 Reaction Zone",funName:"Fischer-Tropsch Chamber",hex:'#e6b341',c3:0xe6b341,em:0x381400,h:.22,emoji:"🏭",tex:'reaction',
-   desc:"This is where the real magic happens. We mix the broken-apart carbon dioxide with hydrogen gas. In this hot, high-pressure zone, the carbon and hydrogen atoms snap together like Lego bricks to build clean liquid fuel.",
-   sci:"Reaction: CO₂ + H₂O → Fuel | Temp: 280°C | Pressure: 64 bar | Heat-driven 99.8% · Light-driven 0.2%.",
+   desc:"This is where the real magic happens. The reactor consumes water (H₂O) and splits it into hydrogen, which then reacts with the broken-apart CO₂. In this hot, high-pressure zone, the carbon and hydrogen atoms snap together like Lego bricks to build clean liquid fuel — and oxygen is released as a byproduct.<br><br><span style='color:#ff8833;'><strong>What you're seeing:</strong> A chaotic swirl of bouncing orange dots. This represents the turbulent mixing of CO₂ and H₂O reacting in all directions.</span>",
+   sci:"Reaction: CO₂ + H₂O → Fuel + O₂ | Temp: 280°C | Pressure: 64 bar | Heat-driven 99.8% · Light-driven 0.2%.",
    fact:"🏭 While the high heat does most of the heavy lifting, the extra 0.2% energy from the supercharged electrons is exactly what's needed to break the tough CO₂ bonds in the first place."},
   {name:"🌡️ Phase-Change Clamp",funName:"Isothermal Buffer",hex:'#559ce6',c3:0x559ce6,em:0x00102e,h:.15,emoji:"🌡️",tex:'clamp',
-   desc:"Making fuel generates a lot of dangerous extra heat! This layer uses boiling water under high pressure to absorb that extra energy. It acts like a high-tech cooling blanket that locks the temperature of the whole machine at exactly 279.8°C.",
+   desc:"Making fuel generates a lot of dangerous extra heat! This layer uses boiling water under high pressure to absorb that extra energy. It acts like a high-tech cooling blanket that locks the temperature of the whole machine at exactly 279.8°C.<br><br><span style='color:#4499ff;'><strong>What you're seeing:</strong> Fast blue dots shooting up and popping. This is the violent water boiling at 64 bar, rapidly absorbing excess heat.</span>",
    sci:"64 bar pressure | Boiling Temp = 279.8°C | Acts as a thermal buffer to stop overheating.",
    fact:"🌡️ When water boils, its temperature stops rising until it all turns to steam. We use this natural physics trick to keep the reactor perfectly stable without needing complex electronic coolers."},
   {name:"🧽 Foam Reflector",funName:"Thermal Insulator",hex:'#b3c6d8',c3:0xb3c6d8,em:0x070a10,h:.15,emoji:"🧽",tex:'foam',
-   desc:"This spongy layer is full of microscopic holes. It acts like a thermal mirror, bouncing 72.5% of the heat back up into the reaction zone so we don't waste energy heating up the bottom of the machine.",
+   desc:"This spongy layer is full of microscopic holes. It acts like a thermal mirror, bouncing 72.5% of the heat back up into the reaction zone so we don't waste energy heating up the bottom of the machine.<br><br><span style='color:#ffffff;'><strong>What you're seeing:</strong> Bright white dots drifting steadily upward. This is the physical heat energy being reflected back up into the reactor.</span>",
    sci:"Sponge-like structure | Bounces back 72.5% of heat | Over 50.1% empty space.",
    fact:"🧽 Even though it looks like solid material, it's actually more than half empty air! This makes it an incredible insulator, keeping heat trapped just like a thick, puffy winter coat."},
   {name:"⚡ Bulk HfN (Rocksalt)",funName:"Hot Carrier Generator",hex:'#18b072',c3:0x18b072,em:0x002211,h:.30,emoji:"⚡",tex:'hfn_bulk',
-   desc:"Normally, metals lose their heat instantly. But Hafnium Nitride (HfN) has a special structure that traps the energy. It creates supercharged 'hot electrons' that hold their energy 6 times longer than normal metals, giving them enough time to power the chemical reactions above.",
+   desc:"Normally, metals lose their heat instantly. But Hafnium Nitride (HfN) has a special structure that traps the energy. It creates supercharged 'hot electrons' that hold their energy 6 times longer than normal metals, giving them enough time to power the chemical reactions above.<br><br><span style='color:#00ffcc;'><strong>What you're seeing:</strong> Bright cyan dots shooting upwards through the entire stack. These are the supercharged 'hot electrons' doing their job and rising to power the layers above.</span>",
    sci:"28.1 meV energy gap | Melts at 3,310°C | Keeps electrons supercharged much longer.",
    fact:"⚡ Hafnium Nitride forms into a crystal shape called 'rocksalt'—exactly like the salt you put on your french fries—but it's so incredibly tough it's used to build rocket engines."},
   {name:"🛡️ Ni-Superalloy Foil",funName:"Structural Substrate",hex:'#7a8c9e',c3:0x7a8c9e,em:0x040810,h:.12,emoji:"🛡️",tex:'foil',
-   desc:"This is the super-strong, flexible metal foundation of the entire reactor. It's only 50 micrometers thick—thinner than a human hair—but it easily survives the intense heat and massive pressure going on inside.",
+   desc:"This is the super-strong, flexible metal foundation of the entire reactor. It's only 50 micrometers thick—thinner than a human hair—but it easily survives the intense heat and massive pressure going on inside.<br><br><span style='color:#7a8c9e;'><strong>What you're seeing:</strong> No particles. This is the solid structural base, so nothing flows through it.</span>",
    sci:"Thickness: 50 μm (thinner than a hair) | Printed using a high-speed roller process.",
    fact:"🛡️ Superalloys are the exact same advanced metals used to build the glowing-hot spinning turbine blades inside commercial jet engines!"}
 ];
 
 const SUN_DATA={
   name:"☀️ Sun",funName:"G-Type Main Sequence Star",hex:"#ffb533",emoji:"☀️",
-  desc:"Our primary energy source. In the vacuum of space, the sun constantly burns through nuclear fusion, blasting out a massive amount of energy. We specifically capture its invisible heat rays (near-infrared light) to power the reactor.",
+  desc:"Our primary energy source. In the vacuum of space, the sun constantly burns through nuclear fusion, blasting out a massive amount of energy. We specifically capture its invisible heat rays (near-infrared light) to power the reactor.<br><br><span style='color:#ffffaa;'><strong>What you're seeing:</strong> Pale yellow photons raining down into the reactor's plasmonic cavity.</span>",
   sci:"Surface Temp: ~5,778 K | Distance: 1 Astronomical Unit (93 million miles) | Energy output: 3.828 × 10²⁶ Watts",
   fact:"☀️ The sun's energy travels through 93 million miles of empty space to reach our reactor, completing the journey in just about 8 minutes and 20 seconds!"
 };
@@ -269,7 +298,6 @@ function makeLegendItem(id, hex, name, clickFn) {
   return d;
 }
 
-// Sun row
 const sunLiD=makeLegendItem('li-sun',SUN_DATA.hex,SUN_DATA.name,()=>selectSun());
 legEl.appendChild(sunLiD);
 const sunLiM=makeLegendItem('li-sun-m',SUN_DATA.hex,SUN_DATA.name,()=>{selectSun();closeDrawer();});
@@ -361,8 +389,42 @@ function makeSmoothGlowTex(){
   const cv=document.createElement('canvas');cv.width=512;cv.height=512;const c=cv.getContext('2d');
   const grd=c.createRadialGradient(256,256,0,256,256,256);
   grd.addColorStop(0,'rgba(255,255,255,1)');grd.addColorStop(0.15,'rgba(255,230,100,1)');
-  grd.addColorStop(0.4,'rgba(255,100,0,0.6)');grd.addColorStop(0.7,'rgba(100,10,0,0.1)');grd.addColorStop(1,'rgba(0,0,0,0)');
+  grd.addColorStop(0.4,'rgba(255,100,0,0.6)');grd.addColorStop(0.7,'rgba(100,10,0,0.1)');
+  grd.addColorStop(1,'rgba(0,0,0,0)');
   c.fillStyle=grd;c.fillRect(0,0,512,512);
+  return new THREE.CanvasTexture(cv);
+}
+
+function makeEarthTex(){
+  const W=512,H=256,cv=document.createElement('canvas');cv.width=W;cv.height=H;
+  const c=cv.getContext('2d');
+  // Ocean
+  const ocean=c.createLinearGradient(0,0,0,H);
+  ocean.addColorStop(0,'#1a3a6e');ocean.addColorStop(1,'#0d2a55');
+  c.fillStyle=ocean;c.fillRect(0,0,W,H);
+  // Land masses (stylised continents)
+  c.fillStyle='#2d6a2d';
+  [[105,75,55,38,-0.3],[128,158,28,52,0.1],[258,88,32,22,0],[262,158,26,46,0.1],[372,78,82,42,-0.1],[405,172,32,18,0.2]].forEach(([x,y,rx,ry,r])=>{c.save();c.translate(x,y);c.rotate(r);c.beginPath();c.ellipse(0,0,rx,ry,0,0,Math.PI*2);c.fill();c.restore();});
+  // Ice caps
+  c.fillStyle='rgba(230,240,255,0.82)';
+  c.beginPath();c.ellipse(W/2,8,W/2,18,0,0,Math.PI*2);c.fill();
+  c.beginPath();c.ellipse(W/2,H-8,W/2,16,0,0,Math.PI*2);c.fill();
+  // Atmosphere haze
+  c.fillStyle='rgba(80,140,255,0.08)';c.fillRect(0,0,W,H);
+  return new THREE.CanvasTexture(cv);
+}
+
+function makeMoonTex(){
+  const W=256,H=128,cv=document.createElement('canvas');cv.width=W;cv.height=H;
+  const c=cv.getContext('2d');
+  c.fillStyle='#9a9a9a';c.fillRect(0,0,W,H);
+  // Craters
+  [[48,38,14],[118,78,18],[198,48,11],[158,98,7],[78,98,5],[220,100,9],[30,100,6]].forEach(([x,y,r])=>{
+    c.fillStyle='rgba(0,0,0,0.18)';c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill();
+    c.strokeStyle='rgba(255,255,255,0.1)';c.lineWidth=1;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.stroke();
+  });
+  // General tone variation
+  c.fillStyle='rgba(0,0,0,0.06)';c.fillRect(0,H/2,W,H/2);
   return new THREE.CanvasTexture(cv);
 }
 
@@ -391,12 +453,42 @@ sun.position.set(20,15,-25);scene.add(sun);
 const glowMat=new THREE.SpriteMaterial({map:makeSmoothGlowTex(),color:0xffffff,transparent:true,opacity:0.6,blending:THREE.AdditiveBlending,depthWrite:false});
 const glowSprite=new THREE.Sprite(glowMat);glowSprite.scale.set(40,40,1);sun.add(glowSprite);
 
+// ── EARTH & MOON ──────────────────────────────────────────────────────────
+const earthMesh=new THREE.Mesh(
+  new THREE.SphereGeometry(0.9,32,32),
+  new THREE.MeshPhongMaterial({map:makeEarthTex(),emissive:0x000d1a,shininess:22,specular:0x224488})
+);
+earthMesh.position.set(-16, 13, 20); // opposite quadrant from sun (20,15,-25)
+scene.add(earthMesh);
+
+const earthAtmoMat=new THREE.SpriteMaterial({map:makeSmoothGlowTex(),color:0x3366ff,transparent:true,opacity:0.4,blending:THREE.AdditiveBlending,depthWrite:false});
+const earthAtmo=new THREE.Sprite(earthAtmoMat);
+earthAtmo.scale.set(4.5,4.5,1);
+earthMesh.add(earthAtmo);
+
+// Moon
+const moonMesh=new THREE.Mesh(
+  new THREE.SphereGeometry(0.24,16,16),
+  new THREE.MeshPhongMaterial({map:makeMoonTex(),emissive:0x0a0a0a,shininess:4})
+);
+scene.add(moonMesh);
+
+// ── ARTEMIS 2 EASTER EGG ─────────────────────────────────────────────────
+const artemisMesh=new THREE.Mesh(
+  new THREE.SphereGeometry(0.055,8,8),
+  new THREE.MeshBasicMaterial({color:0xffffff})
+);
+scene.add(artemisMesh);
+const artemisGlowMat=new THREE.SpriteMaterial({map:makeSmoothGlowTex(),color:0x88ccff,transparent:true,opacity:0.6,blending:THREE.AdditiveBlending,depthWrite:false});
+const artemisGlow=new THREE.Sprite(artemisGlowMat);
+artemisGlow.scale.set(0.4,0.4,1);
+artemisMesh.add(artemisGlow);
+
 scene.add(new THREE.AmbientLight(0x0a1830,1.5));
 const sunLight=new THREE.DirectionalLight(0xffddaa,1.4);sunLight.position.copy(sun.position);scene.add(sunLight);
 const dl2=new THREE.DirectionalLight(0xff7040,0.8);dl2.position.set(-5,-4,2);scene.add(dl2);
 const dl3=new THREE.DirectionalLight(0x00ffcc,0.4);dl3.position.set(0,5,-4);scene.add(dl3);
 const pl=new THREE.PointLight(0x00d4ff,0.6,30);pl.position.set(0,6,5);scene.add(pl);
-const hfnLight=new THREE.PointLight(0x00ffaa,0,10);scene.add(hfnLight);
 
 const grp=new THREE.Group();scene.add(grp);
 const LW=5.8,LD=2.5,GA=.016,GX=.7;
@@ -410,7 +502,7 @@ LAYERS.forEach((_,i)=>tY.push(aY[i]));
 const meshes=[];
 LAYERS.forEach((l,i)=>{
   const topTex=makeTopTex(l.tex,l.c3);const sideTex=makeSideTex(l.c3);
-  const mkM=(tex)=>new THREE.MeshPhongMaterial({color:l.c3,emissive:l.em,shininess:25,specular:0x152535,map:tex});
+  const mkM=(tex)=>new THREE.MeshPhongMaterial({color:l.c3,emissive:l.em,shininess:0,specular:0x000000,map:tex});
   const mats=[mkM(sideTex),mkM(sideTex),mkM(topTex),mkM(sideTex),mkM(sideTex),mkM(sideTex)];
   const geo=new THREE.BoxGeometry(LW,l.h,LD);
   const mesh=new THREE.Mesh(geo,mats);
@@ -422,6 +514,7 @@ LAYERS.forEach((l,i)=>{
 
 // ── INPUT STATE ─────────────────────────────────────────
 let exploded=false,selIdx=-1,hovIdx=-1,autoRot=true;
+let dotsFading=false,dotsFadeAlpha=1.0;
 const rx={c:0.35,t:0.35},ry={c:0.6,t:0.6},zm={c:12,t:12};
 const target={c:new THREE.Vector3(),t:new THREE.Vector3()};
 const rc=new THREE.Raycaster(),mv=new THREE.Vector2();
@@ -446,7 +539,7 @@ renderer.domElement.addEventListener('click',e=>{
   if(h.length>0){h[0].object===sun?selectSun():selectLayer(h[0].object.userData.idx);}else{closePanel();}
 });
 
-// ── TOUCH: orbit + pinch zoom ────────────────────────────
+// ── TOUCH ────────────────────────────
 let touch1=null,touch2=null,pinchDist0=0,tx0=0,ty0=0;
 
 function getTouchDist(a,b){return Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);}
@@ -472,7 +565,6 @@ renderer.domElement.addEventListener('touchmove',e=>{
     const oldZm=zm.t;
     zm.t=Math.max(4,Math.min(18,zm.t+delta));
     pinchDist0=dist;
-    // Aim raycaster at finger midpoint
     mv.x=((t0.clientX+t1.clientX)/2/innerWidth)*2-1;
     mv.y=-(((t0.clientY+t1.clientY)/2)/innerHeight)*2+1;
     if(zm.t!==oldZm){
@@ -498,7 +590,7 @@ renderer.domElement.addEventListener('touchend',e=>{
     const t=e.changedTouches[0];
     if(Math.abs(t.clientX-tx0)<12&&Math.abs(t.clientY-ty0)<12){
       mv.x=(t.clientX/innerWidth)*2-1;mv.y=-(t.clientY/innerHeight)*2+1;
-      rc.setFromCamera(mv,cam);const h=rc.intersectObjects([...meshes,sun]);
+      rc.setFromCamera(mv,cam);const h=rc.intersectObjects([...meshes,sun,earthMesh,moonMesh]);
       if(h.length>0){h[0].object===sun?selectSun():selectLayer(h[0].object.userData.idx);}else{closePanel();}
     }
   }
@@ -515,7 +607,7 @@ function selectLayer(i){
   selIdx=i;const l=LAYERS[i];
   document.getElementById('pe').textContent=l.emoji;
   document.getElementById('pn').textContent=l.funName;
-  document.getElementById('pd').textContent=l.desc;
+  document.getElementById('pd').innerHTML=l.desc;
   document.getElementById('ps').textContent=l.sci;
   document.getElementById('pf').textContent=l.fact;
   document.getElementById('panel').classList.add('open');
@@ -525,7 +617,7 @@ function selectSun(){
   selIdx='sun';
   document.getElementById('pe').textContent=SUN_DATA.emoji;
   document.getElementById('pn').textContent=SUN_DATA.funName;
-  document.getElementById('pd').textContent=SUN_DATA.desc;
+  document.getElementById('pd').innerHTML=SUN_DATA.desc;
   document.getElementById('ps').textContent=SUN_DATA.sci;
   document.getElementById('pf').textContent=SUN_DATA.fact;
   document.getElementById('panel').classList.add('open');
@@ -541,10 +633,186 @@ document.getElementById('cb').onclick=closePanel;
 // ── CONTROLS ────────────────────────────────────────────
 document.getElementById('xbtn').addEventListener('click',()=>{
   exploded=!exploded;const b=document.getElementById('xbtn');
-  if(exploded){b.textContent='🔩 ASSEMBLE';b.style.background='linear-gradient(135deg,#0088cc,#004488)';b.style.boxShadow='0 0 16px rgba(0,136,204,.38)';LAYERS.forEach((_,i)=>tY[i]=xY[i]);zm.t=window.innerWidth<680?18:16;}
-  else{b.textContent='⚡ EXPLODE';b.style.background='linear-gradient(135deg,#ff6b35,#cc2800)';b.style.boxShadow='0 0 16px rgba(255,107,53,.38)';LAYERS.forEach((_,i)=>tY[i]=aY[i]);zm.t=window.innerWidth<680?10:12;}
+  if(exploded){
+    b.textContent='🔩 ASSEMBLE';b.style.background='linear-gradient(135deg,#0088cc,#004488)';b.style.boxShadow='0 0 16px rgba(0,136,204,.38)';
+    dotsFading=false;dotsFadeAlpha=1.0;dotsGroup.visible=true;
+    LAYERS.forEach((_,i)=>tY[i]=xY[i]);
+    zm.t=window.innerWidth<680?18:16;
+
+    const gTop = xY[0] + LAYERS[0].h/2;
+    const hBot = xY[6] - LAYERS[6].h/2;
+
+    pData.forEach(pd=>{
+      const li=pd.layer;
+      const mTop=xY[li]+LAYERS[li].h/2;
+      const mBot=xY[li]-LAYERS[li].h/2;
+
+      if(pd.beh==='down'){
+        const hfnBotE=xY[6]-LAYERS[6].h/2;
+        scatterPhoton(pd,mTop,hfnBotE,LW,LD);
+      } else if(pd.beh==='lateral'){
+        const s=Math.random()>.5?1:-1;
+        pd.x=s*LW/2*1.2;
+        pd.y=mBot+Math.random()*(mTop-mBot);
+        pd.z=(Math.random()-.5)*LD*.8;
+        pd.vx=-s*(0.015+Math.random()*.01);
+      } else if(pd.beh==='up_travel'){
+        pd.y=hBot+Math.random()*(gTop-hBot);
+        pd.x=(Math.random()-.5)*LW*.7;
+        pd.z=(Math.random()-.5)*LD*.7;
+        pd.vy=0.035+Math.random()*.02;
+      } else if(pd.beh==='bubble'){
+        pd.y=mBot+Math.random()*(mTop-mBot);
+        pd.x=(Math.random()-.5)*LW*.85;
+        pd.z=(Math.random()-.5)*LD*.85;
+        pd.vy=0.03+Math.random()*.03;
+      } else if(pd.beh==='up'){
+        pd.x=(Math.random()-.5)*LW*.8;
+        pd.y=mBot+Math.random()*((mTop-mBot)+0.4); 
+        pd.z=(Math.random()-.5)*LD*.8;
+        pd.vx=(Math.random()-.5)*0.001;
+        pd.vy=0.008+Math.random()*0.005;
+        pd.vz=(Math.random()-.5)*0.001;
+      } else {
+        pd.y=mBot+Math.random()*(mTop-mBot);
+        pd.x=(Math.random()-.5)*LW*.8;
+        pd.z=(Math.random()-.5)*LD*.8;
+      }
+      pd.mesh.position.set(pd.x,pd.y,pd.z);
+    });
+  }
+  else{b.textContent='⚡ EXPLODE';b.style.background='linear-gradient(135deg,#ff6b35,#cc2800)';b.style.boxShadow='0 0 16px rgba(255,107,53,.38)';LAYERS.forEach((_,i)=>tY[i]=aY[i]);zm.t=window.innerWidth<680?10:12;dotsFading=true;}
+  beamMesh.visible=false; 
 });
 document.getElementById('rbtn').onclick=()=>{rx.t=0.35;ry.t=0.6;zm.t=window.innerWidth<680?13:12;autoRot=true;target.t.set(0,0,0);};
+
+// ── WELCOME OVERLAY ──────────────────────────────────────
+const welcomeEl=document.getElementById('welcome');
+welcomeEl.addEventListener('click',()=>{welcomeEl.classList.add('gone');},{ once:true });
+
+// ── SUN BEAM ──────────────────────────────────────────────
+const beamGeo=new THREE.CylinderGeometry(0.0,2.2,1,16,1,true);
+const beamMat=new THREE.MeshBasicMaterial({
+  color:0xffdd66,transparent:true,opacity:0.07,
+  side:THREE.DoubleSide,depthWrite:false,blending:THREE.AdditiveBlending
+});
+const beamMesh=new THREE.Mesh(beamGeo,beamMat);
+beamMesh.visible=false; 
+scene.add(beamMesh);
+
+// ══════════════════════════════════════════════════════════
+// ── ENERGY DOTS (Sphere Meshes) ──────────────────────────
+// ══════════════════════════════════════════════════════════
+
+const LAYER_HEX=[
+  0xffffaa, // 0 Plasmonic
+  0x000000, // 1 MEMS
+  0x44ff88, // 2 Peapods
+  0xff8833, // 3 Reaction
+  0x4499ff, // 4 Clamp
+  0xffffff, // 5 Foam
+  0x00ffcc, // 6 HfN
+  0x000000, // 7 Superalloy
+];
+
+const LAYER_BEH=['down','none','lateral','chaos','bubble','up','up_travel','none'];
+const LAYER_ALLOC=[50,0,40,60,45,40,70,0];
+
+const dotGeo=new THREE.SphereGeometry(1,8,6);
+const dotsGroup=new THREE.Group();
+dotsGroup.visible=false;
+scene.add(dotsGroup);
+
+const pData=[];
+
+for(let li=0;li<LAYERS.length;li++){
+  const count=LAYER_ALLOC[li];
+  const beh=LAYER_BEH[li];
+  if(beh==='none')continue;
+
+  for(let k=0;k<count;k++){
+    const mMid=aY[li], mH=LAYERS[li].h;
+    let sx=0,sy=0,sz=0, vx=0,vy=0,vz=0, rad=0.06;
+
+    if(beh==='down'){
+      const ptx=(Math.random()-.5)*LW*.8;
+      const ptz=(Math.random()-.5)*LD*.8;
+      const pty=mMid+mH/2;
+      sx=20+(Math.random()-.5)*3;
+      sy=15+(Math.random()-.5)*3;
+      sz=-25+(Math.random()-.5)*3;
+      const plen=Math.hypot(ptx-sx,pty-sy,ptz-sz);
+      const spd=0.18+Math.random()*.08;
+      vx=(ptx-sx)/plen*spd;
+      vy=(pty-sy)/plen*spd;
+      vz=(ptz-sz)/plen*spd;
+      const tr=Math.random();
+      sx+=vx/spd*plen*tr;
+      sy+=vy/spd*plen*tr;
+      sz+=vz/spd*plen*tr;
+      rad=0.07;
+    } else if(beh==='lateral'){
+      const s=Math.random()>.5?1:-1;
+      sx=s*LW/2*1.2;
+      sy=mMid+(Math.random()-.5)*mH;
+      sz=(Math.random()-.5)*LD*.8;
+      vx=-s*(0.015+Math.random()*.01);
+      rad=0.06;
+    } else if(beh==='chaos'){
+      sx=(Math.random()-.5)*LW*.8;
+      sy=mMid+(Math.random()-.5)*mH;
+      sz=(Math.random()-.5)*LD*.8;
+      vx=(Math.random()-.5)*.018;
+      vy=(Math.random()-.5)*.018;
+      vz=(Math.random()-.5)*.018;
+      rad=0.05;
+    } else if(beh==='bubble'){
+      sx=(Math.random()-.5)*LW*.85;
+      sy=mMid-mH/2+Math.random()*mH;
+      sz=(Math.random()-.5)*LD*.85;
+      vy=0.03+Math.random()*.03;
+      vx=(Math.random()-.5)*.005;
+      vz=(Math.random()-.5)*.005;
+      rad=0.065;
+    } else if(beh==='up'){
+      sx=(Math.random()-.5)*LW*.8;
+      sy=mMid-mH/2+Math.random()*(mH+0.4);
+      sz=(Math.random()-.5)*LD*.8;
+      vy=0.008+Math.random()*.005;
+      vx=(Math.random()-.5)*.001;
+      vz=(Math.random()-.5)*.001;
+      rad=0.045;
+    } else if(beh==='up_travel'){
+      sx=(Math.random()-.5)*LW*.7;
+      sy=mMid+(Math.random()-.5)*mH;
+      sz=(Math.random()-.5)*LD*.7;
+      vy=0.035+Math.random()*.02;
+      rad=0.08;
+    }
+
+    const mat=new THREE.MeshBasicMaterial({
+      color:LAYER_HEX[li],
+      transparent:true,
+      opacity:1.0,
+      blending:THREE.AdditiveBlending,
+      depthWrite:false
+    });
+    const dot=new THREE.Mesh(dotGeo,mat);
+    dot.scale.setScalar(rad);
+    dot.position.set(sx,sy,sz);
+    dotsGroup.add(dot);
+
+    pData.push({mesh:dot,mat,x:sx,y:sy,z:sz,vx,vy,vz,layer:li,beh,baseRad:rad});
+  }
+}
+
+(function(){
+  const initMTop=aY[0]+LAYERS[0].h/2;
+  const initHfnBot=aY[6]-LAYERS[6].h/2;
+  pData.forEach(pd=>{
+    if(pd.beh==='down') scatterPhoton(pd,initMTop,initHfnBot,LW,LD);
+  });
+})();
 
 // ── EASTER EGG ───────────────────────────────────────────
 let typed="";
@@ -559,11 +827,182 @@ function startSeaLionRain(){
 // ── RENDER LOOP ──────────────────────────────────────────
 const clk=new THREE.Clock();
 const eT=new THREE.Color();
-const _v3=new THREE.Vector3();
 function lerp(a,b,t){return a+(b-a)*t;}
 
-// Adjust initial zoom for mobile
 if(window.innerWidth<680){zm.c=zm.t=13;}
+
+// ── LIVE ARTEMIS 2 & MOON 3D POSITION FETCHING (JPL HORIZONS VECTORS) ────────
+const EARTH_MOON_KM = 384400;
+const TLI_MS = Date.UTC(2026, 3, 2, 23, 35, 0); 
+
+const TRAJ = [
+  [  0,   6563], 
+  [ 10,  82000],
+  [ 20, 155000],
+  [ 30, 217000],
+  [ 41, 271337],
+  [ 55, 320000],
+  [ 70, 360000],
+  [ 89, 384400], 
+  [105, 360000], 
+  [125, 310000],
+  [145, 250000],
+  [163, 190000],
+  [178, 130000],
+  [187,  65000],
+  [193,   6563], 
+];
+
+function getArtemisDistKm(){
+  const hoursAfterTLI = (Date.now() - TLI_MS) / 3_600_000;
+  if(hoursAfterTLI <= 0)   return TRAJ[0][1];
+  if(hoursAfterTLI >= TRAJ[TRAJ.length-1][0]) return TRAJ[TRAJ.length-1][1];
+  for(let i=0; i<TRAJ.length-1; i++){
+    const [t0,d0]=TRAJ[i], [t1,d1]=TRAJ[i+1];
+    if(hoursAfterTLI>=t0 && hoursAfterTLI<=t1){
+      const f=(hoursAfterTLI-t0)/(t1-t0);
+      return d0+f*(d1-d0);
+    }
+  }
+  return TRAJ[0][1];
+}
+
+let artemisDistFromEarthKm = getArtemisDistKm();
+let artemisPosKm = null;
+let moonPosKm = null;
+let isArtemisLive = false;
+
+async function fetchLiveTelemetry(id) {
+  const now = new Date();
+  const startTime = now.toISOString().substring(0, 16).replace('T', ' '); 
+  now.setMinutes(now.getMinutes() + 1);
+  const stopTime = now.toISOString().substring(0, 16).replace('T', ' ');
+
+  // EPHEM_TYPE='VECTORS' requests Cartesian coordinates.
+  // OUT_UNITS='KM-S' forces X, Y, Z to be measured in strict Kilometers.
+  // VEC_TABLE='1' simplifies output to purely position (X, Y, Z).
+  const url = `https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND='${id}'&OBJ_DATA='NO'&MAKE_EPHEM='YES'&EPHEM_TYPE='VECTORS'&CENTER='500@399'&START_TIME='${encodeURIComponent(startTime)}'&STOP_TIME='${encodeURIComponent(stopTime)}'&STEP_SIZE='1m'&OUT_UNITS='KM-S'&CSV_FORMAT='YES'&VEC_TABLE='1'`;
+
+  const response = await fetch(url);
+  if (!response.ok) throw new Error("NASA JPL API response was not ok");
+  const data = await response.json();
+  const resultText = data.result;
+  
+  if (resultText && resultText.includes('$$SOE')) {
+    const ephemBlock = resultText.split('$$SOE')[1].split('$$EOE')[0];
+    const lines = ephemBlock.trim().split('\n');
+    if (lines.length > 0) {
+      // VECTORS CSV format: JDTDB, Calendar Date (TDB), X, Y, Z
+      const cols = lines[0].split(',');
+      if (cols.length >= 5) {
+        const x = parseFloat(cols[2]);
+        const y = parseFloat(cols[3]);
+        const z = parseFloat(cols[4]);
+        
+        if (!isNaN(x) && !isNaN(y) && !isNaN(z)) {
+          // Pythagorean theorem gives the exact distance from Earth center
+          const dist = Math.hypot(x, y, z);
+          return { x, y, z, dist };
+        }
+      }
+    }
+  }
+  throw new Error(`Could not parse 3D telemetry for object ${id}`);
+}
+
+async function updateArtemisHUDLive() {
+  try {
+    // Fetch coordinates for BOTH the Moon and Artemis II simultaneously
+    const [artData, moonData] = await Promise.all([
+      fetchLiveTelemetry('-1024'), // Artemis II Spacecraft
+      fetchLiveTelemetry('301')    // Earth's Moon
+    ]);
+
+    artemisPosKm = artData;
+    moonPosKm = moonData;
+    isArtemisLive = true;
+    artemisDistFromEarthKm = artData.dist;
+    
+    // DEBUG: Log the exact NASA telemetry to the console
+    console.log("🚀 [LIVE] Artemis II Telemetry:", {
+      Artemis_XYZ_KM: { x: artData.x, y: artData.y, z: artData.z },
+      Moon_XYZ_KM: { x: moonData.x, y: moonData.y, z: moonData.z },
+      Artemis_Distance_KM: artData.dist,
+      Moon_Distance_KM: moonData.dist
+    });
+    
+    // Percentage to Moon using the Moon's real dynamic distance
+    const pct = ((artData.dist / moonData.dist) * 100).toFixed(1);
+    updateHUDText(artData.dist, pct, '[LIVE 3D]');
+    
+  } catch (error) {
+    console.warn("Live 3D fetch failed. Falling back to local trajectory interpolation.", error);
+    isArtemisLive = false;
+    artemisDistFromEarthKm = getArtemisDistKm();
+    
+    // DEBUG: Log the fallback telemetry to the console
+    console.log("🚀 [SIMULATED] Artemis II Telemetry:", {
+      Artemis_Distance_KM: artemisDistFromEarthKm,
+      Error_Reason: error.message || error.toString()
+    });
+
+    const pct = ((artemisDistFromEarthKm / EARTH_MOON_KM) * 100).toFixed(1);
+    updateHUDText(artemisDistFromEarthKm, pct, '[SIMULATED]');
+  }
+}
+
+function updateHUDText(dist, pct, status) {
+  const hoursAfterTLI = (Date.now() - TLI_MS) / 3_600_000;
+  let phase = 'Translunar Coast';
+  if(hoursAfterTLI < 0)       phase = 'Pre-Launch';
+  else if(hoursAfterTLI < 89) phase = 'Outbound Coast';
+  else if(hoursAfterTLI < 105)phase = 'Lunar Flyby';
+  else if(hoursAfterTLI < 193)phase = 'Return Coast';
+  else phase = 'Mission Complete';
+
+  const el = document.getElementById('artemis-hud');
+  if(el) {
+    el.textContent = `🚀 Artemis II · ${Math.round(dist).toLocaleString()} km from Earth · ${pct}% to Moon · ${phase} ${status}`;
+  }
+}
+
+// Initial fetch and start 60s polling
+updateArtemisHUDLive();
+setInterval(updateArtemisHUDLive, 60000); 
+
+function scatterPhoton(pd, mTop, hfnBot, LW, LD){
+  const sunX=20, sunY=15, sunZ=-25;
+  const phase1Len=Math.hypot(sunX, sunY-mTop, sunZ);
+  const phase2Len=mTop-hfnBot;
+  const t1=phase1Len/0.22;
+  const t2=phase2Len/0.026;
+  const pick=Math.random()*(t1+t2);
+
+  if(pick<t1){
+    const sc=pick/t1;
+    pd.x=sunX+(Math.random()-0.5)*3;
+    pd.y=sunY+(Math.random()-0.5)*3;
+    pd.z=sunZ+(Math.random()-0.5)*3;
+    const rtx=(Math.random()-0.5)*LW*0.8;
+    const rtz=(Math.random()-0.5)*LD*0.8;
+    const rlen=Math.hypot(rtx-pd.x, mTop-pd.y, rtz-pd.z);
+    const rspd=0.18+Math.random()*0.08;
+    pd.vx=(rtx-pd.x)/rlen*rspd;
+    pd.vy=(mTop-pd.y)/rlen*rspd;
+    pd.vz=(rtz-pd.z)/rlen*rspd;
+    pd.x+=(pd.vx/rspd)*rlen*sc;
+    pd.y+=(pd.vy/rspd)*rlen*sc;
+    pd.z+=(pd.vz/rspd)*rlen*sc;
+  } else {
+    const sc=(pick-t1)/t2;
+    pd.x=(Math.random()-0.5)*LW*0.8;
+    pd.y=mTop-sc*phase2Len;
+    pd.z=(Math.random()-0.5)*LD*0.8;
+    pd.vx=0;
+    pd.vy=-(0.022+Math.random()*0.008);
+    pd.vz=0;
+  }
+}
 
 function animate(){
   requestAnimationFrame(animate);
@@ -577,7 +1016,7 @@ function animate(){
   cam.lookAt(target.c);
 
   if(!dragging&&touch2===null){
-    rc.setFromCamera(mv,cam);const h=rc.intersectObjects([...meshes,sun]);
+    rc.setFromCamera(mv,cam);const h=rc.intersectObjects([...meshes,sun,earthMesh,moonMesh]);
     hovIdx=h.length>0?(h[0].object===sun?'sun':h[0].object.userData.idx):-1;
     renderer.domElement.style.cursor=hovIdx!==-1?'pointer':'grab';
   }
@@ -598,7 +1037,179 @@ function animate(){
     if(lines)lines.material.opacity=lerp(lines.material.opacity,isHov||isSel?.5:.18,.1);
   });
 
-  meshes[6].getWorldPosition(_v3);hfnLight.position.copy(_v3);hfnLight.intensity=0.40;
+  // ── BEAM PULSE ──────────────────────────────────────────
+  if(exploded){
+    const liveTop=new THREE.Vector3(0, meshes[0].position.y+LAYERS[0].h/2, 0);
+    const bDir=new THREE.Vector3().subVectors(liveTop, sun.position).normalize();
+    const bLen=sun.position.distanceTo(liveTop);
+    const bMid=new THREE.Vector3().addVectors(sun.position, liveTop).multiplyScalar(0.5);
+    beamMesh.position.copy(bMid);
+    const bUp=new THREE.Vector3(0,1,0);
+    beamMesh.setRotationFromQuaternion(new THREE.Quaternion().setFromUnitVectors(bUp,bDir));
+    beamMesh.scale.set(1,bLen,1);
+    beamMat.opacity=0.05+0.03*Math.sin(t*1.8);
+  }
+
+  // ══════════════════════════════════════════════════════════
+  // ── DOT ANIMATION ────────────────────────────────────────
+  // ══════════════════════════════════════════════════════════
+  if(exploded||dotsFading){
+    const globalTopY=meshes[0].position.y+LAYERS[0].h/2;
+
+    for(let i=0;i<pData.length;i++){
+      const pd=pData[i];
+      const li=pd.layer;
+      const mTop=meshes[li].position.y+LAYERS[li].h/2;
+      const mBot=meshes[li].position.y-LAYERS[li].h/2;
+
+      pd.x+=pd.vx; pd.y+=pd.vy; pd.z+=pd.vz;
+
+      // ── 🪞 PHOTONS FALLING FROM SUN ──────────────────
+      if(pd.beh==='down'){
+        pd.mat.opacity=0.9;
+        const hfnBot=meshes[6].position.y-LAYERS[6].h/2;
+
+        if(pd.y<=mTop && (pd.vx!==0||pd.vz!==0)){
+          pd.vx=0;
+          pd.vz=0;
+          pd.vy=-(0.022+Math.random()*0.008);
+        }
+
+        if(pd.y<hfnBot){
+          scatterPhoton(pd,mTop,hfnBot,LW,LD);
+        }
+
+        const shimmer=pd.baseRad*(1.0+0.4*Math.sin(t*10.0+i*1.7));
+        pd.mesh.scale.setScalar(shimmer);
+      }
+
+      // ── 🌱 CO₂ DRIFTING IN FROM SIDES ────────────────
+      else if(pd.beh==='lateral'){
+        const centerDist = Math.abs(pd.x) / (LW/2);
+        pd.mat.opacity = Math.max(0.0, centerDist * 1.5 - 0.2);
+
+        if((pd.vx > 0 && pd.x > 0.1) || (pd.vx < 0 && pd.x < -0.1) || pd.mat.opacity <= 0.02){
+          const s=Math.random()>.5?1:-1;
+          pd.x=s*LW/2*1.2;
+          pd.y=mBot+Math.random()*(mTop-mBot);
+          pd.z=(Math.random()-.5)*LD*.8;
+          pd.vx=-s*(0.015+Math.random()*.01);
+        }
+        if(pd.y>mTop+0.2||pd.y<mBot-0.2){
+          pd.y=mBot+Math.random()*(mTop-mBot);
+        }
+      }
+
+      // ── 🏭 TURBULENT MIXING ──────────────────────────
+      else if(pd.beh==='chaos'){
+        pd.vx+=(Math.random()-.5)*.007;
+        pd.vy+=(Math.random()-.5)*.007;
+        pd.vz+=(Math.random()-.5)*.007;
+        pd.vx*=.92; pd.vy*=.92; pd.vz*=.92;
+        if(pd.y>mTop){pd.y=mTop;pd.vy*=-0.8;}
+        if(pd.y<mBot){pd.y=mBot;pd.vy*=-0.8;}
+        if(Math.abs(pd.x)>LW/2*.85){pd.vx*=-0.8;pd.x=Math.sign(pd.x)*LW/2*.85;}
+        if(Math.abs(pd.z)>LD/2*.85){pd.vz*=-0.8;pd.z=Math.sign(pd.z)*LD/2*.85;}
+        pd.mat.opacity=0.65+0.35*Math.sin(t*3.0+i*2.1);
+        pd.mesh.scale.setScalar(pd.baseRad*(0.8+0.4*Math.abs(Math.sin(t*2.5+i))));
+      }
+
+      // ── 🌡️ VIOLENT BOILING BUBBLES ───────────────────
+      else if(pd.beh==='bubble'){
+        if(pd.y>mTop){
+          pd.y=mBot+Math.random()*0.05;
+          pd.x=(Math.random()-.5)*LW*.85;
+          pd.z=(Math.random()-.5)*LD*.85;
+          pd.vy=0.03+Math.random()*.03;
+          pd.vx=(Math.random()-.5)*.006;
+          pd.vz=(Math.random()-.5)*.006;
+        }
+        pd.vy+=0.0015;
+        pd.vx+=(Math.random()-.5)*.003;
+        pd.vz+=(Math.random()-.5)*.003;
+        const rise=(pd.y-mBot)/(mTop-mBot+0.01);
+        pd.mesh.scale.setScalar(pd.baseRad*(0.5+1.5*rise));
+        pd.mat.opacity=rise>0.85?(1.0-(rise-0.85)/0.15):0.95;
+      }
+
+      // ── 🧽 HEAT REFLECTED UPWARD ─────────────────────
+      else if(pd.beh==='up'){
+        const rise=(pd.y-mBot)/(mTop+0.4-mBot);
+        pd.mat.opacity=Math.min(1.0, Math.max(0.0, rise<0.15?rise/0.15:rise>0.85?(1-rise)/0.15:0.8));
+        if(pd.y>mTop+0.4){
+          pd.x=(Math.random()-.5)*LW*.8;
+          pd.y=mBot-Math.random()*0.05;
+          pd.z=(Math.random()-.5)*LD*.8;
+          pd.vx=(Math.random()-.5)*0.001;
+          pd.vy=0.008+Math.random()*0.005;
+          pd.vz=(Math.random()-.5)*0.001;
+        }
+        pd.vx*=0.97;pd.vz*=0.97;
+        pd.mesh.scale.setScalar(pd.baseRad*(0.9+0.2*Math.sin(t*1.5+i)));
+      }
+
+      // ── ⚡ HOT ELECTRONS — ENTIRE STACK ───────────────
+      else if(pd.beh==='up_travel'){
+        const hfnBot=meshes[6].position.y-LAYERS[6].h/2;
+        if(pd.y>globalTopY+0.3){
+          pd.y=hfnBot+Math.random()*LAYERS[6].h*0.3;
+          pd.x=(Math.random()-.5)*LW*.7;
+          pd.z=(Math.random()-.5)*LD*.7;
+          pd.vy=0.035+Math.random()*.02;
+        }
+
+        pd.vx+=(Math.random()-.5)*.0015;
+        pd.vz+=(Math.random()-.5)*.0015;
+        pd.vx*=0.96;pd.vz*=0.96;
+
+        const pulse=pd.baseRad*(1.0+0.5*Math.sin(t*8.0+i*0.8));
+        pd.mesh.scale.setScalar(pulse);
+        const travelFrac=(pd.y-hfnBot)/(globalTopY-hfnBot+0.01);
+        pd.mat.opacity=0.7+0.3*Math.min(travelFrac,1.0);
+      }
+
+      pd.mesh.position.set(pd.x,pd.y,pd.z);
+      if(dotsFading) pd.mat.opacity*=dotsFadeAlpha;
+    }
+    if(dotsFading){
+      dotsFadeAlpha=Math.max(0,dotsFadeAlpha-0.03);
+      if(dotsFadeAlpha<=0){dotsGroup.visible=false;dotsFading=false;}
+    }
+  }
+
+  // Earth rotation
+  earthMesh.rotation.y=t*0.04;
+
+  if (isArtemisLive && artemisPosKm && moonPosKm) {
+    // Compress the real 384,400km into roughly 2.5 scene units to fit on screen
+    const SCENE_SCALE = 2.5 / 384400;
+
+    // NASA coordinates (X, Y, Z) mapping to ThreeJS Engine (X, Y, Z).
+    // NASA's Z is "up", so we map NASA Z -> Scene Y, and NASA Y -> Scene Depth
+    moonMesh.position.set(
+      earthMesh.position.x + (moonPosKm.x * SCENE_SCALE),
+      earthMesh.position.y + (moonPosKm.z * SCENE_SCALE),
+      earthMesh.position.z - (moonPosKm.y * SCENE_SCALE)
+    );
+
+    artemisMesh.position.set(
+      earthMesh.position.x + (artemisPosKm.x * SCENE_SCALE),
+      earthMesh.position.y + (artemisPosKm.z * SCENE_SCALE),
+      earthMesh.position.z - (artemisPosKm.y * SCENE_SCALE)
+    );
+  } else {
+    // FALLBACK: Fixed moon position and basic line interpolation
+    moonMesh.position.set(
+      earthMesh.position.x+2.2,
+      earthMesh.position.y+0.3,
+      earthMesh.position.z+0.5
+    );
+
+    const artFrac=Math.min(1,Math.max(0,artemisDistFromEarthKm/EARTH_MOON_KM));
+    artemisMesh.position.lerpVectors(earthMesh.position,moonMesh.position,artFrac);
+    artemisMesh.position.y+=Math.sin(artFrac*Math.PI)*0.35; // arc lift
+  }
+
   renderer.render(scene,cam);
 }
 animate();
