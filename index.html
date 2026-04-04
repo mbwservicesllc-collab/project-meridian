@@ -881,7 +881,10 @@ async function fetchLiveTelemetry(id) {
   // EPHEM_TYPE='VECTORS' requests Cartesian coordinates.
   // OUT_UNITS='KM-S' forces X, Y, Z to be measured in strict Kilometers.
   // VEC_TABLE='1' simplifies output to purely position (X, Y, Z).
-  const url = `https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND='${id}'&OBJ_DATA='NO'&MAKE_EPHEM='YES'&EPHEM_TYPE='VECTORS'&CENTER='500@399'&START_TIME='${encodeURIComponent(startTime)}'&STOP_TIME='${encodeURIComponent(stopTime)}'&STEP_SIZE='1m'&OUT_UNITS='KM-S'&CSV_FORMAT='YES'&VEC_TABLE='1'`;
+  const nasaUrl = `https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND='${id}'&OBJ_DATA='NO'&MAKE_EPHEM='YES'&EPHEM_TYPE='VECTORS'&CENTER='500@399'&START_TIME='${encodeURIComponent(startTime)}'&STOP_TIME='${encodeURIComponent(stopTime)}'&STEP_SIZE='1m'&OUT_UNITS='KM-S'&CSV_FORMAT='YES'&VEC_TABLE='1'`;
+
+  // Wrap the NASA URL in a public CORS proxy to bypass browser security restrictions
+  const url = `https://corsproxy.io/?${encodeURIComponent(nasaUrl)}`;
 
   const response = await fetch(url);
   if (!response.ok) throw new Error("NASA JPL API response was not ok");
