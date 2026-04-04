@@ -883,13 +883,18 @@ async function fetchLiveTelemetry(id) {
   // VEC_TABLE='1' simplifies output to purely position (X, Y, Z).
   const nasaUrl = `https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND='${id}'&OBJ_DATA='NO'&MAKE_EPHEM='YES'&EPHEM_TYPE='VECTORS'&CENTER='500@399'&START_TIME='${encodeURIComponent(startTime)}'&STOP_TIME='${encodeURIComponent(stopTime)}'&STEP_SIZE='1m'&OUT_UNITS='KM-S'&CSV_FORMAT='YES'&VEC_TABLE='1'`;
 
-  // Swapped from corsproxy.io to allorigins.win to prevent 301 redirects triggering CORS again
-  const url = `https://api.allorigins.win/raw?url=${encodeURIComponent(nasaUrl)}`;
+  // Use the /get endpoint which wraps the response in a proper CORS-approved JSON object
+  const url = `https://api.allorigins.win/get?url=${encodeURIComponent(nasaUrl)}`;
 
   const response = await fetch(url);
   if (!response.ok) throw new Error("NASA JPL API or Proxy response was not ok");
-  const data = await response.json();
-  const resultText = data.result;
+  
+  const proxyData = await response.json();
+  if (!proxyData.contents) throw new Error("Proxy returned empty contents");
+  
+  // The NASA JSON string is safely embedded inside the 'contents' string of the proxy response
+  const nasaData = JSON.parse(proxyData.contents);
+  const resultText = nasaData.result;
   
   if (resultText && resultText.includes('$$SOE')) {
     const ephemBlock = resultText.split('$$SOE')[1].split('$$EOE')[0];
