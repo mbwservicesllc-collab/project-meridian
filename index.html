@@ -431,7 +431,7 @@ Object.assign(renderer.domElement.style,{position:'fixed',top:'0',left:'0',width
 document.body.appendChild(renderer.domElement);
 
 const scene=new THREE.Scene();
-function mobileFOV(){return innerWidth<680?65:44;}
+function mobileFOV(){return innerWidth<680?65:55;}
 const cam=new THREE.PerspectiveCamera(mobileFOV(),innerWidth/innerHeight,.1,200);
 
 const starsGeo=new THREE.BufferGeometry();
@@ -450,7 +450,7 @@ const earthMesh=new THREE.Mesh(
   new THREE.SphereGeometry(0.9,32,32),
   new THREE.MeshPhongMaterial({map:makeEarthTex(),emissive:0x000d1a,shininess:22,specular:0x224488})
 );
-earthMesh.position.set(-5, 4, -14);
+earthMesh.position.set(-5, 8, -20);
 scene.add(earthMesh);
 
 const earthAtmoMat=new THREE.SpriteMaterial({map:makeSmoothGlowTex(),color:0x3366ff,transparent:true,opacity:0.4,blending:THREE.AdditiveBlending,depthWrite:false});
