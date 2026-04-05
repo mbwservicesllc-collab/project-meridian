@@ -450,12 +450,12 @@ const earthMesh=new THREE.Mesh(
   new THREE.SphereGeometry(1.6,32,32),
   new THREE.MeshPhongMaterial({map:makeEarthTex(),emissive:0x000d1a,shininess:22,specular:0x224488})
 );
-earthMesh.position.set(-28, 14, -30);
+earthMesh.position.set(-55, 18, -20);
 scene.add(earthMesh);
 
 const earthAtmoMat=new THREE.SpriteMaterial({map:makeSmoothGlowTex(),color:0x3366ff,transparent:true,opacity:0.4,blending:THREE.AdditiveBlending,depthWrite:false});
 const earthAtmo=new THREE.Sprite(earthAtmoMat);
-earthAtmo.scale.set(22,22,1);
+earthAtmo.scale.set(32,32,1);
 earthMesh.add(earthAtmo);
 
 const moonMesh=new THREE.Mesh(
