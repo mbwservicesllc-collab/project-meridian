@@ -447,19 +447,19 @@ const glowMat=new THREE.SpriteMaterial({map:makeSmoothGlowTex(),color:0xffffff,t
 const glowSprite=new THREE.Sprite(glowMat);glowSprite.scale.set(40,40,1);sun.add(glowSprite);
 
 const earthMesh=new THREE.Mesh(
-  new THREE.SphereGeometry(0.9,32,32),
+  new THREE.SphereGeometry(1.6,32,32),
   new THREE.MeshPhongMaterial({map:makeEarthTex(),emissive:0x000d1a,shininess:22,specular:0x224488})
 );
-earthMesh.position.set(-5, 8, -20);
+earthMesh.position.set(-5, 9, -35);
 scene.add(earthMesh);
 
 const earthAtmoMat=new THREE.SpriteMaterial({map:makeSmoothGlowTex(),color:0x3366ff,transparent:true,opacity:0.4,blending:THREE.AdditiveBlending,depthWrite:false});
 const earthAtmo=new THREE.Sprite(earthAtmoMat);
-earthAtmo.scale.set(2.8,2.8,1);
+earthAtmo.scale.set(4.2,4.2,1);
 earthMesh.add(earthAtmo);
 
 const moonMesh=new THREE.Mesh(
-  new THREE.SphereGeometry(0.24,16,16),
+  new THREE.SphereGeometry(0.44,16,16),
   new THREE.MeshPhongMaterial({map:makeMoonTex(),emissive:0x0a0a0a,shininess:4})
 );
 scene.add(moonMesh);
@@ -471,7 +471,7 @@ const artemisMesh=new THREE.Mesh(
 scene.add(artemisMesh);
 const artemisGlowMat=new THREE.SpriteMaterial({map:makeSmoothGlowTex(),color:0x88ccff,transparent:true,opacity:0.6,blending:THREE.AdditiveBlending,depthWrite:false});
 const artemisGlow=new THREE.Sprite(artemisGlowMat);
-artemisGlow.scale.set(0.4,0.4,1);
+artemisGlow.scale.set(0.7,0.7,1);
 artemisMesh.add(artemisGlow);
 
 scene.add(new THREE.AmbientLight(0x0a1830,1.5));
