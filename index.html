@@ -462,6 +462,7 @@ const moonMesh=new THREE.Mesh(
   new THREE.SphereGeometry(0.44,16,16),
   new THREE.MeshPhongMaterial({map:makeMoonTex(),emissive:0x0a0a0a,shininess:4})
 );
+moonMesh.rotation.z = Math.PI * 0.5;
 scene.add(moonMesh);
 
 const artemisMesh=new THREE.Mesh(
@@ -1163,6 +1164,7 @@ function animate(){
     }
   }
 
+  earthMesh.rotation.z = Math.PI * 0.5;
   earthMesh.rotation.y=t*0.04;
 
   if (isArtemisLive && artemisPosKm && moonPosKm) {
