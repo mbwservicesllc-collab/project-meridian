@@ -26,6 +26,25 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 
 /* ── WELCOME OVERLAY ─────────────────────── */
 
+/* ── WELCOME OVERLAY ─────────────────────── */
+#welcome{
+  position:fixed;inset:0;z-index:250;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:rgba(3,7,18,.82);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  transition:opacity .5s;cursor:pointer;
+}
+#welcome.gone{opacity:0;pointer-events:none;}
+.wc-title{font-family:'Orbitron',sans-serif;font-size:clamp(16px,4vw,26px);font-weight:900;color:#00d4ff;letter-spacing:.08em;text-align:center;text-shadow:0 0 24px rgba(0,212,255,.6);margin-bottom:12px;}
+.wc-sub{font-size:clamp(14px,3.5vw,18px);color:rgba(232,244,253,.75);text-align:center;max-width:320px;line-height:1.6;margin-bottom:28px;}
+.wc-tap{
+  font-family:'Orbitron',sans-serif;font-size:clamp(11px,2.5vw,14px);
+  color:#030712;background:#00d4ff;
+  padding:12px 28px;border-radius:30px;letter-spacing:.12em;
+  font-weight:700;animation:wpulse 1.8s ease-in-out infinite;
+}
+@keyframes wpulse{0%,100%{box-shadow:0 0 0 0 rgba(0,212,255,.5);}70%{box-shadow:0 0 0 14px rgba(0,212,255,0);}}
+
 /* ── DESKTOP LEGEND ──────────────────────── */
 #legend{position:fixed;left:12px;top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:4px;}
 .li{display:flex;align-items:center;gap:10px;cursor:pointer;padding:5px 9px;border-radius:5px;transition:all .2s;border:1px solid transparent;}
