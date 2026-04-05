@@ -453,7 +453,7 @@ const earthMesh=new THREE.Mesh(
 earthMesh.position.set(-55, 18, -20);
 scene.add(earthMesh);
 
-const earthAtmoMat=new THREE.SpriteMaterial({map:makeSmoothGlowTex(),color:0x3366ff,transparent:true,opacity:0.4,blending:THREE.AdditiveBlending,depthWrite:false});
+const earthAtmoMat=new THREE.SpriteMaterial({map:makeSmoothGlowTex(),color:0x3366ff,transparent:true,opacity:0.0,blending:THREE.AdditiveBlending,depthWrite:false});
 const earthAtmo=new THREE.Sprite(earthAtmoMat);
 earthAtmo.scale.set(32,32,1);
 earthMesh.add(earthAtmo);
@@ -1168,7 +1168,7 @@ function animate(){
   earthMesh.rotation.y=t*0.04;
 
   if (isArtemisLive && artemisPosKm && moonPosKm) {
-    const SCENE_SCALE = 2.5 / 384400;
+    const SCENE_SCALE = 7.0 / 384400;
     moonMesh.position.set(
       earthMesh.position.x + (moonPosKm.x * SCENE_SCALE),
       earthMesh.position.y + (moonPosKm.z * SCENE_SCALE),
@@ -1181,7 +1181,7 @@ function animate(){
     );
   } else {
     moonMesh.position.set(
-      earthMesh.position.x+3.5,
+      earthMesh.position.x+7.0,
       earthMesh.position.y+0.5,
       earthMesh.position.z+2.5
     );
