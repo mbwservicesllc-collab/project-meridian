@@ -25,27 +25,6 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .h-hero{font-size:clamp(11px,2.6vw,15px);color:rgba(255,220,100,.82);margin-top:5px;letter-spacing:.02em;font-weight:600;}
 
 /* ── WELCOME OVERLAY ─────────────────────── */
-#welcome{
-  position:fixed;inset:0;z-index:250;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  background:rgba(3,7,18,.82);
-  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-  transition:opacity .5s;cursor:pointer;
-}
-#welcome.gone{opacity:0;pointer-events:none;}
-.wc-emoji{font-size:clamp(52px,12vw,80px);margin-bottom:18px;animation:wbob 2s ease-in-out infinite;}
-@keyframes wbob{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
-.wc-title{font-family:'Orbitron',sans-serif;font-size:clamp(16px,4vw,26px);font-weight:900;color:#00d4ff;letter-spacing:.08em;text-align:center;text-shadow:0 0 24px rgba(0,212,255,.6);margin-bottom:12px;}
-.wc-sub{font-size:clamp(14px,3.5vw,18px);color:rgba(232,244,253,.75);text-align:center;max-width:320px;line-height:1.6;margin-bottom:28px;}
-.wc-tap{
-  font-family:'Orbitron',sans-serif;font-size:clamp(11px,2.5vw,14px);
-  color:#030712;background:#00d4ff;
-  padding:12px 28px;border-radius:30px;letter-spacing:.12em;
-  font-weight:700;animation:wpulse 1.8s ease-in-out infinite;
-}
-@keyframes wpulse{0%,100%{box-shadow:0 0 0 0 rgba(0,212,255,.5);}70%{box-shadow:0 0 0 14px rgba(0,212,255,0);}}
-.wc-finger{font-size:clamp(28px,7vw,44px);margin-bottom:10px;animation:wfinger 1.4s ease-in-out infinite;}
-@keyframes wfinger{0%,100%{transform:scale(1) rotate(-10deg);}50%{transform:scale(1.18) rotate(10deg);}}
 
 /* ── DESKTOP LEGEND ──────────────────────── */
 #legend{position:fixed;left:12px;top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:4px;}
@@ -191,7 +170,6 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 
 <!-- Welcome overlay -->
 <div id="welcome">
-  <div class="wc-finger">👆</div>
   <div class="wc-title">Welcome to<br>Project Meridian</div>
   <div class="wc-sub">A machine that turns sunlight &amp; CO₂ into clean fuel — tap any glowing layer to learn how it works!</div>
   <div class="wc-tap">TAP ANYWHERE TO EXPLORE</div>
@@ -647,12 +625,13 @@ function selectSun(){
 function selectArtemis(){
   selIdx='artemis';
   const distKm=Math.round(artemisDistFromEarthKm).toLocaleString();
+  const distMi=Math.round(artemisDistFromEarthKm*0.621371).toLocaleString();
   const pct=moonPosKm?(artemisDistFromEarthKm/moonPosKm.dist*100).toFixed(1):(artemisDistFromEarthKm/EARTH_MOON_KM*100).toFixed(1);
   const liveTag=isArtemisLive?'<span style="color:#00ffcc;font-size:10px;">● LIVE</span>':'<span style="color:#ff6b35;font-size:10px;">● SIMULATED</span>';
   document.getElementById('pe').textContent=ARTEMIS_DATA.emoji;
   document.getElementById('pn').textContent=ARTEMIS_DATA.funName;
   document.getElementById('pd').innerHTML=ARTEMIS_DATA.desc;
-  document.getElementById('ps').innerHTML=`<div style="font-size:15px;font-weight:600;color:#00d4ff;margin-bottom:6px;">${distKm} km from Earth &nbsp;${liveTag}</div><div style="margin-bottom:4px;">${pct}% of the way to the Moon</div>${ARTEMIS_DATA.sci}`;
+  document.getElementById('ps').innerHTML=`<div style="font-size:15px;font-weight:600;color:#00d4ff;margin-bottom:6px;">${distKm} km / ${distMi} mi &nbsp;${liveTag}</div><div style="margin-bottom:4px;">${pct}% of the way to the Moon</div>${ARTEMIS_DATA.sci}`;
   const ms=ARTEMIS_DATA.milestones.map(m=>`<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;">
     <span style="flex-shrink:0;font-size:12px;margin-top:1px;">${m.done?'✅':'🔲'}</span>
     <span style="font-size:13px;color:${m.done?'rgba(232,244,253,.6)':'rgba(232,244,253,.9)'};">
@@ -724,6 +703,8 @@ document.getElementById('xbtn').addEventListener('click',()=>{
   beamMesh.visible=false;
 });
 document.getElementById('rbtn').onclick=()=>{rx.t=0.35;ry.t=0.6;zm.t=window.innerWidth<680?13:12;autoRot=true;target.t.set(0,0,0);};
+
+// ── WELCOME OVERLAY ──────────────────────────────────────
 
 // ── WELCOME OVERLAY ──────────────────────────────────────
 const welcomeEl=document.getElementById('welcome');
