@@ -436,7 +436,7 @@ function makeMoonTex(){
 }
 
 // ── THREE.JS ────────────────────────────────────────────
-const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance'});
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));
 renderer.setSize(innerWidth,innerHeight);
 renderer.setClearColor(0x000000,0);
