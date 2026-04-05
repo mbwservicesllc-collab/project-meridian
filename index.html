@@ -606,7 +606,7 @@ renderer.domElement.addEventListener('touchend',e=>{
     const t=e.changedTouches[0];
     if(Math.abs(t.clientX-tx0)<12&&Math.abs(t.clientY-ty0)<12){
       mv.x=(t.clientX/innerWidth)*2-1;mv.y=-(t.clientY/innerHeight)*2+1;
-      rc.setFromCamera(mv,cam);const h=rc.intersectObjects([...meshes,sun,earthMesh,moonMesh,artemisHitMesh]);
+      rc.setFromCamera(mv,cam);const h=rc.intersectObjects([...meshes,sun,earthMesh,moonMesh,...(window.innerWidth>=680?[artemisHitMesh]:[])]);
       if(h.length>0){
         if(h[0].object===sun)selectSun();
         else if(h[0].object===artemisHitMesh)selectArtemis();
@@ -1055,6 +1055,11 @@ const clk=new THREE.Clock();
 const eT=new THREE.Color();
 function lerp(a,b,t){return a+(b-a)*t;}
 
+if(window.innerWidth<680){
+  earthMesh.visible=false;
+  moonMesh.visible=false;
+  artemisMesh.visible=false;
+}
 if(window.innerWidth<680){zm.c=zm.t=13;}
 
 function animate(){
@@ -1213,11 +1218,8 @@ function animate(){
       earthMesh.position.y + (moonPosKm.z * SCENE_SCALE),
       earthMesh.position.z - (moonPosKm.y * SCENE_SCALE)
     );
-    artemisMesh.position.set(
-      earthMesh.position.x + (artemisPosKm.x * SCENE_SCALE),
-      earthMesh.position.y + (artemisPosKm.z * SCENE_SCALE),
-      earthMesh.position.z - (artemisPosKm.y * SCENE_SCALE)
-    );
+    const artFrac = Math.min(1, Math.max(0, artemisPosKm.dist / moonPosKm.dist));
+    artemisMesh.position.lerpVectors(earthMesh.position, moonMesh.position, artFrac);
   } else {
     moonMesh.position.set(
       earthMesh.position.x+7.0,
