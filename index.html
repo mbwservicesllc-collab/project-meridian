@@ -646,13 +646,15 @@ function selectArtemis(){
   selIdx='artemis';
   const distKm=Math.round(artemisDistFromEarthKm).toLocaleString();
   const distMi=Math.round(artemisDistFromEarthKm*0.621371).toLocaleString();
-  const pct=moonPosKm?(artemisDistFromEarthKm/moonPosKm.dist*100).toFixed(1):(artemisDistFromEarthKm/EARTH_MOON_KM*100).toFixed(1);
-  const liveTag=isArtemisLive?'<span style="color:#00ffcc;font-size:10px;">● LIVE</span>':'<span style="color:#ff6b35;font-size:10px;">● SIMULATED</span>';
+  const moonDist=moonPosKm?moonPosKm.dist:EARTH_MOON_KM;
+  const artFrac=Math.min(1,Math.max(0,artemisDistFromEarthKm/moonDist));
+  const isReturning=artemisDistFromEarthKm>moonDist*0.85&&getArtemisDistKm()<(moonDist*0.85);
+  const pct=(artFrac*100).toFixed(1);
+  const pctLabel=artFrac>=0.99?'Past lunar flyby — returning to Earth':`${pct}% of the way to the Moon`;  const liveTag=isArtemisLive?'<span style="color:#00ffcc;font-size:10px;">● LIVE</span>':'<span style="color:#ff6b35;font-size:10px;">● SIMULATED</span>';
   document.getElementById('pe').textContent=ARTEMIS_DATA.emoji;
   document.getElementById('pn').textContent=ARTEMIS_DATA.funName;
   document.getElementById('pd').innerHTML=ARTEMIS_DATA.desc;
-  document.getElementById('ps').innerHTML=`<div style="font-size:15px;font-weight:600;color:#00d4ff;margin-bottom:6px;">${distKm} km / ${distMi} mi &nbsp;${liveTag}</div><div style="margin-bottom:4px;">${pct}% of the way to the Moon</div>${ARTEMIS_DATA.sci}`;
-  const ms=ARTEMIS_DATA.milestones.map(m=>`<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;">
+  document.getElementById('ps').innerHTML=`<div style="font-size:15px;font-weight:600;color:#00d4ff;margin-bottom:6px;">${distKm} km / ${distMi} mi &nbsp;${liveTag}</div><div style="margin-bottom:4px;">${pctLabel}</div>${ARTEMIS_DATA.sci}`;  const ms=ARTEMIS_DATA.milestones.map(m=>`<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;">
     <span style="flex-shrink:0;font-size:12px;margin-top:1px;">${m.done?'✅':'🔲'}</span>
     <span style="font-size:13px;color:${m.done?'rgba(232,244,253,.6)':'rgba(232,244,253,.9)'};">
       <strong style="color:${m.done?'rgba(136,204,255,.5)':'#00d4ff'};font-family:Orbitron,sans-serif;font-size:9px;letter-spacing:.1em;">${m.date}</strong>
