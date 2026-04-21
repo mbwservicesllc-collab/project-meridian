@@ -25,8 +25,6 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .h-hero{font-size:clamp(11px,2.6vw,15px);color:rgba(255,220,100,.82);margin-top:5px;letter-spacing:.02em;font-weight:600;}
 
 /* ── WELCOME OVERLAY ─────────────────────── */
-
-/* ── WELCOME OVERLAY ─────────────────────── */
 #welcome{
   position:fixed;inset:0;z-index:250;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -283,24 +281,6 @@ const SUN_DATA={
   fact:"☀️ The sun's energy travels through 93 million miles of empty space to reach our reactor, completing the journey in just about 8 minutes and 20 seconds!"
 };
 
-const ARTEMIS_DATA={
-  name:"🚀 Artemis II",funName:"Orion Spacecraft · Live Mission",emoji:"🚀",hex:"#88ccff",
-  desc:"Four astronauts have completed their historic lunar flyby and are now returning to Earth — the first humans to leave Earth orbit since Apollo 17 in December 1972. The mission launched April 1, 2026 aboard the Space Launch System rocket from Kennedy Space Center's historic Pad 39B.<br><br><strong>Crew:</strong> Reid Wiseman (Commander), Victor Glover, Christina Koch (NASA) · Jeremy Hansen (CSA). Glover is the first person of color, Koch the first woman, and Hansen the first non-American to travel beyond low Earth orbit.<br><br>On Day 5, Orion crossed the lunar sphere of influence — the invisible boundary where the Moon's gravity overtakes Earth's pull. On Day 6 the crew swung around the far side of the Moon, losing all radio contact with Earth for ~40 minutes, before witnessing <strong>Earthrise</strong> as our planet crept back over the lunar limb at 7:25 PM EDT.<br><br><span style='color:#88ccff;'><strong>What you're seeing:</strong> The glowing white dot tracking between Earth and Moon is Orion's real-time position, updated every 60 seconds directly from NASA's JPL Horizons database.</span>",
-  sci:"Spacecraft: Orion + ESA Service Module | Rocket: Space Launch System (SLS) | Mission duration: ~10 days | Closest lunar approach: 4,070 miles (6,549 km) | New human distance record: 252,760 miles from Earth | Splashdown: ~8:07 PM EDT Apr 10 · San Diego · Recovery ship: USS John P. Murtha",
-  fact:"🌕 On Day 6, the crew shattered the all-time human distance record, reaching 252,760 miles from Earth — surpassing Apollo 13's 248,655-mile record set in 1970. Their zero-gravity indicator is a plush toy named 'Rise', a tribute to the iconic Earthrise photo taken by Apollo 8.",
-  milestones:[
-    {done:true,  date:"Apr 1",  label:"Launch · 6:35 PM EDT"},
-    {done:true,  date:"Apr 1",  label:"Proximity ops demo · manual Orion flight test"},
-    {done:true,  date:"Apr 2",  label:"Translunar injection burn"},
-    {done:true,  date:"Apr 3–5",label:"Outbound coast · systems checks · trajectory correction burn cancelled (on perfect path)"},
-    {done:true,  date:"Apr 6",  label:"Entered lunar sphere of influence · 12:37 AM EDT"},
-    {done:true,  date:"Apr 6",  label:"Broke Apollo 13 distance record (248,655 mi) · 1:56 PM EDT"},
-    {done:true,  date:"Apr 6",  label:"Closest Moon approach (4,070 mi) · far-side blackout (~40 min) · new human record: 252,760 mi"},
-    {done:true,  date:"Apr 6",  label:"'Earthrise' — Earth returns to view · radio contact restored · 7:25 PM EDT"},
-    {done:false, date:"Apr 7–9",label:"Return transit — currently underway"},
-    {done:false, date:"Apr 10", label:"Splashdown ~8:07 PM EDT · San Diego · USS John P. Murtha recovery"},
-  ]
-};
 const legEl=document.getElementById('legend');
 const drawerList=document.getElementById('drawer-list');
 
@@ -479,21 +459,6 @@ const moonMesh=new THREE.Mesh(
 moonMesh.rotation.z = Math.PI * 0.5;
 scene.add(moonMesh);
 
-const artemisMesh=new THREE.Mesh(
-  new THREE.SphereGeometry(0.055,8,8),
-  new THREE.MeshBasicMaterial({color:0xffffff})
-);
-scene.add(artemisMesh);
-const artemisHitMesh=new THREE.Mesh(
-  new THREE.SphereGeometry(0.5,8,8),
-  new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false})
-);
-artemisMesh.add(artemisHitMesh);
-const artemisGlowMat=new THREE.SpriteMaterial({map:makeSmoothGlowTex(),color:0x88ccff,transparent:true,opacity:0.6,blending:THREE.AdditiveBlending,depthWrite:false});
-const artemisGlow=new THREE.Sprite(artemisGlowMat);
-artemisGlow.scale.set(1.4,1.4,1);
-artemisMesh.add(artemisGlow);
-
 scene.add(new THREE.AmbientLight(0x0a1830,1.5));
 const sunLight=new THREE.DirectionalLight(0xffddaa,1.4);sunLight.position.copy(sun.position);scene.add(sunLight);
 const dl2=new THREE.DirectionalLight(0xff7040,0.8);dl2.position.set(-5,-4,2);scene.add(dl2);
@@ -545,10 +510,9 @@ renderer.domElement.addEventListener('wheel',e=>{
 renderer.domElement.addEventListener('click',e=>{
   if(Math.abs(e.clientX-cx0)>5||Math.abs(e.clientY-cy0)>5)return;
   mv.x=(e.clientX/innerWidth)*2-1;mv.y=-(e.clientY/innerHeight)*2+1;
-  rc.setFromCamera(mv,cam);const h=rc.intersectObjects([...meshes,sun,artemisHitMesh]);
+  rc.setFromCamera(mv,cam);const h=rc.intersectObjects([...meshes,sun]);
   if(h.length>0){
     if(h[0].object===sun)selectSun();
-    else if(h[0].object===artemisHitMesh)selectArtemis();
     else selectLayer(h[0].object.userData.idx);
   }else{closePanel();}
 });
@@ -604,10 +568,9 @@ renderer.domElement.addEventListener('touchend',e=>{
     const t=e.changedTouches[0];
     if(Math.abs(t.clientX-tx0)<12&&Math.abs(t.clientY-ty0)<12){
       mv.x=(t.clientX/innerWidth)*2-1;mv.y=-(t.clientY/innerHeight)*2+1;
-      rc.setFromCamera(mv,cam);const h=rc.intersectObjects([...meshes,sun,earthMesh,moonMesh,...(window.innerWidth>=680?[artemisHitMesh]:[])]);
+      rc.setFromCamera(mv,cam);const h=rc.intersectObjects([...meshes,sun,earthMesh,moonMesh]);
       if(h.length>0){
         if(h[0].object===sun)selectSun();
-        else if(h[0].object===artemisHitMesh)selectArtemis();
         else selectLayer(h[0].object.userData.idx);
       }else{closePanel();}
     }
@@ -619,7 +582,6 @@ renderer.domElement.addEventListener('touchend',e=>{
 function syncLegendActive(){
   document.querySelectorAll('.li').forEach(el=>el.classList.remove('lit'));
   if(selIdx==='sun'){document.getElementById('li-sun').classList.add('lit');document.getElementById('li-sun-m').classList.add('lit');}
-  else if(selIdx==='artemis'){}
   else if(selIdx>=0){document.getElementById(`li${selIdx}`).classList.add('lit');document.getElementById(`li${selIdx}-m`)?.classList.add('lit');}
 }
 function selectLayer(i){
@@ -639,27 +601,6 @@ function selectSun(){
   document.getElementById('pd').innerHTML=SUN_DATA.desc;
   document.getElementById('ps').textContent=SUN_DATA.sci;
   document.getElementById('pf').textContent=SUN_DATA.fact;
-  document.getElementById('panel').classList.add('open');
-  syncLegendActive();
-}
-function selectArtemis(){
-  selIdx='artemis';
-  const distKm=Math.round(artemisDistFromEarthKm).toLocaleString();
-  const distMi=Math.round(artemisDistFromEarthKm*0.621371).toLocaleString();
-  const moonDist=moonPosKm?moonPosKm.dist:EARTH_MOON_KM;
-  const artFrac=Math.min(1,Math.max(0,artemisDistFromEarthKm/moonDist));
-  const isReturning=artemisDistFromEarthKm>moonDist*0.85&&getArtemisDistKm()<(moonDist*0.85);
-  const pct=(artFrac*100).toFixed(1);
-  const pctLabel=artFrac>=0.99?'Past lunar flyby — returning to Earth':`${pct}% of the way to the Moon`;  const liveTag=isArtemisLive?'<span style="color:#00ffcc;font-size:10px;">● LIVE</span>':'<span style="color:#ff6b35;font-size:10px;">● SIMULATED</span>';
-  document.getElementById('pe').textContent=ARTEMIS_DATA.emoji;
-  document.getElementById('pn').textContent=ARTEMIS_DATA.funName;
-  document.getElementById('pd').innerHTML=ARTEMIS_DATA.desc;
-  document.getElementById('ps').innerHTML=`<div style="font-size:15px;font-weight:600;color:#00d4ff;margin-bottom:6px;">${distKm} km / ${distMi} mi &nbsp;${liveTag}</div><div style="margin-bottom:4px;">${pctLabel}</div>${ARTEMIS_DATA.sci}`;  const ms=ARTEMIS_DATA.milestones.map(m=>`<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;">
-    <span style="flex-shrink:0;font-size:12px;margin-top:1px;">${m.done?'✅':'🔲'}</span>
-    <span style="font-size:13px;color:${m.done?'rgba(232,244,253,.6)':'rgba(232,244,253,.9)'};">
-      <strong style="color:${m.done?'rgba(136,204,255,.5)':'#00d4ff'};font-family:Orbitron,sans-serif;font-size:9px;letter-spacing:.1em;">${m.date}</strong>
-      &nbsp;${m.label}</span></div>`).join('');
-  document.getElementById('pf').innerHTML=`<div style="font-family:Orbitron,sans-serif;font-size:9px;color:#ff6b35;letter-spacing:.18em;margin-bottom:8px;">MISSION MILESTONES</div>${ms}`;
   document.getElementById('panel').classList.add('open');
   syncLegendActive();
 }
@@ -725,8 +666,6 @@ document.getElementById('xbtn').addEventListener('click',()=>{
   beamMesh.visible=false;
 });
 document.getElementById('rbtn').onclick=()=>{rx.t=0.35;ry.t=0.6;zm.t=window.innerWidth<680?13:12;autoRot=true;target.t.set(0,0,0);};
-
-// ── WELCOME OVERLAY ──────────────────────────────────────
 
 // ── WELCOME OVERLAY ──────────────────────────────────────
 const welcomeEl=document.getElementById('welcome');
@@ -851,173 +790,6 @@ function startSeaLionRain(){
   for(let i=0;i<40;i++){setTimeout(()=>{const l=document.createElement('div');l.className='sea-lion';l.textContent='🦭';l.style.left=Math.random()*100+'vw';l.style.animationDuration=(Math.random()*2+1)+'s';l.style.fontSize=(Math.random()*40+30)+'px';document.body.appendChild(l);setTimeout(()=>l.remove(),3000);},Math.random()*3000);}
 }
 
-// ══════════════════════════════════════════════════════════
-// ── ARTEMIS II LIVE TELEMETRY — MULTI-PROXY FALLBACK ─────
-// ══════════════════════════════════════════════════════════
-
-const EARTH_MOON_KM = 384400;
-const TLI_MS = Date.UTC(2026, 3, 2, 23, 35, 0);
-
-const TRAJ = [
-  [  0,   6563],
-  [ 10,  82000],
-  [ 20, 155000],
-  [ 30, 217000],
-  [ 41, 271337],
-  [ 55, 320000],
-  [ 70, 360000],
-  [ 89, 384400],
-  [105, 360000],
-  [125, 310000],
-  [145, 250000],
-  [163, 190000],
-  [178, 130000],
-  [187,  65000],
-  [193,   6563],
-];
-
-function getArtemisDistKm(){
-  const hoursAfterTLI = (Date.now() - TLI_MS) / 3_600_000;
-  if(hoursAfterTLI <= 0)   return TRAJ[0][1];
-  if(hoursAfterTLI >= TRAJ[TRAJ.length-1][0]) return TRAJ[TRAJ.length-1][1];
-  for(let i=0; i<TRAJ.length-1; i++){
-    const [t0,d0]=TRAJ[i], [t1,d1]=TRAJ[i+1];
-    if(hoursAfterTLI>=t0 && hoursAfterTLI<=t1){
-      const f=(hoursAfterTLI-t0)/(t1-t0);
-      return d0+f*(d1-d0);
-    }
-  }
-  return TRAJ[0][1];
-}
-
-let artemisDistFromEarthKm = getArtemisDistKm();
-let artemisPosKm = null;
-let moonPosKm = null;
-let isArtemisLive = false;
-
-// ── Build the NASA Horizons URL ───────────────────────────
-function buildNasaUrl(id) {
-  const now = new Date();
-  const startTime = now.toISOString().substring(0, 16).replace('T', ' ');
-  now.setMinutes(now.getMinutes() + 1);
-  const stopTime = now.toISOString().substring(0, 16).replace('T', ' ');
-  return `https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND='${id}'&OBJ_DATA='NO'&MAKE_EPHEM='YES'&EPHEM_TYPE='VECTORS'&CENTER='500@399'&START_TIME='${encodeURIComponent(startTime)}'&STOP_TIME='${encodeURIComponent(stopTime)}'&STEP_SIZE='1m'&OUT_UNITS='KM-S'&CSV_FORMAT='YES'&VEC_TABLE='1'`;
-}
-
-// ── Parse the NASA JSON result text ──────────────────────
-function parseNasaResult(nasaData) {
-  const resultText = nasaData && nasaData.result;
-  if (!resultText || !resultText.includes('$$SOE')) throw new Error('No ephemeris data in response');
-  const ephemBlock = resultText.split('$$SOE')[1].split('$$EOE')[0];
-  const lines = ephemBlock.trim().split('\n');
-  if (!lines.length) throw new Error('Empty ephemeris block');
-  const cols = lines[0].split(',');
-  if (cols.length < 5) throw new Error('Too few CSV columns');
-  const x = parseFloat(cols[2]);
-  const y = parseFloat(cols[3]);
-  const z = parseFloat(cols[4]);
-  if (isNaN(x) || isNaN(y) || isNaN(z)) throw new Error('Non-numeric coordinates');
-  return { x, y, z, dist: Math.hypot(x, y, z) };
-}
-
-// ── Promise.race timeout — avoids AbortSignal which can't cross iframe boundaries ─
-function fetchWithTimeout(url, ms) {
-  const timeout = new Promise((_, reject) =>
-    setTimeout(() => reject(new Error(`Timeout after ${ms}ms`)), ms)
-  );
-  return Promise.race([fetch(url), timeout]);
-}
-
-// ── Try multiple CORS proxies in sequence ─────────────────
-async function fetchWithProxyFallback(nasaUrl) {
-  const proxies = [
-    // corsproxy.io — returns the raw JSON response directly
-    {
-      buildUrl: (u) => `https://corsproxy.io/?${encodeURIComponent(u)}`,
-      parse:    async (r) => r.json()
-    },
-    // allorigins.win — wraps response in { contents: "..." }
-    {
-      buildUrl: (u) => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,
-      parse:    async (r) => { const d = await r.json(); return JSON.parse(d.contents); }
-    },
-    // codetabs.com — returns raw JSON directly
-    {
-      buildUrl: (u) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
-      parse:    async (r) => r.json()
-    }
-  ];
-
-  for (const proxy of proxies) {
-    try {
-      const response = await fetchWithTimeout(proxy.buildUrl(nasaUrl), 8000);
-      if (!response.ok) {
-        console.warn(`Proxy HTTP ${response.status}: ${proxy.buildUrl(nasaUrl).split('?')[0]}`);
-        continue;
-      }
-      const data = await proxy.parse(response);
-      if (data && data.result) return data;
-      console.warn('Proxy returned data without .result field');
-    } catch (e) {
-      console.warn(`Proxy failed (${proxy.buildUrl(nasaUrl).split('?')[0]}):`, e.message || e);
-    }
-  }
-  throw new Error('All CORS proxies exhausted — no NASA data available');
-}
-
-// ── Fetch one object's telemetry ──────────────────────────
-async function fetchLiveTelemetry(id) {
-  const nasaUrl = buildNasaUrl(id);
-  const nasaData = await fetchWithProxyFallback(nasaUrl);
-  return parseNasaResult(nasaData);
-}
-
-// ── HUD update ────────────────────────────────────────────
-async function updateArtemisHUDLive() {
-  try {
-    const [artData, moonData] = await Promise.all([
-      fetchLiveTelemetry('-1024'),  // Artemis II
-      fetchLiveTelemetry('301')     // Earth's Moon
-    ]);
-
-    artemisPosKm = artData;
-    moonPosKm    = moonData;
-    isArtemisLive = true;
-    artemisDistFromEarthKm = artData.dist;
-
-    console.log('[LIVE] Spacecraft telemetry:', {
-      Artemis_XYZ_KM: { x: artData.x, y: artData.y, z: artData.z },
-      Moon_XYZ_KM:    { x: moonData.x, y: moonData.y, z: moonData.z },
-      Artemis_Distance_KM: artData.dist,
-      Moon_Distance_KM:    moonData.dist
-    });
-
-    const pct = ((artData.dist / moonData.dist) * 100).toFixed(1);
-    updateHUDText(artData.dist, pct, '[LIVE 3D]');
-    if(selIdx==='artemis') selectArtemis();
-
-  } catch (error) {
-    console.warn('All proxies failed — falling back to local trajectory.', error.message || error);
-    isArtemisLive = false;
-    artemisDistFromEarthKm = getArtemisDistKm();
-
-    console.log('[SIMULATED] Spacecraft telemetry:', {
-      Artemis_Distance_KM: artemisDistFromEarthKm,
-      Error_Reason: error.message || String(error)
-    });
-
-    const pct = ((artemisDistFromEarthKm / EARTH_MOON_KM) * 100).toFixed(1);
-    updateHUDText(artemisDistFromEarthKm, pct, '[SIMULATED]');
-    if(selIdx==='artemis') selectArtemis();
-  }
-}
-
-function updateHUDText(dist, pct, status) {}
-
-// Initial fetch + 60-second polling
-updateArtemisHUDLive();
-setInterval(updateArtemisHUDLive, 60000);
-
 // ── PHOTON SCATTER ────────────────────────────────────────
 function scatterPhoton(pd, mTop, hfnBot, LW, LD){
   const sunX=20, sunY=15, sunZ=-25;
@@ -1061,8 +833,8 @@ function lerp(a,b,t){return a+(b-a)*t;}
 if(window.innerWidth<680){
   earthMesh.visible=false;
   moonMesh.visible=false;
-  artemisMesh.visible=false;
 }
+
 if(window.innerWidth<680){zm.c=zm.t=13;}
 
 function animate(){
@@ -1077,8 +849,8 @@ function animate(){
   cam.lookAt(target.c);
 
   if(!dragging&&touch2===null){
-    rc.setFromCamera(mv,cam);const h=rc.intersectObjects([...meshes,sun,earthMesh,moonMesh,artemisHitMesh]);
-    hovIdx=h.length>0?(h[0].object===sun?'sun':h[0].object===artemisHitMesh?'artemis':h[0].object.userData.idx):-1;
+    rc.setFromCamera(mv,cam);const h=rc.intersectObjects([...meshes,sun,earthMesh,moonMesh]);
+    hovIdx=h.length>0?(h[0].object===sun?'sun':h[0].object.userData.idx):-1;
     renderer.domElement.style.cursor=hovIdx!==-1?'pointer':'grab';
   }
 
@@ -1212,27 +984,14 @@ function animate(){
   }
 
   earthMesh.rotation.z = Math.PI * 0.5;
-  earthMesh.rotation.y=t*0.04;
+  earthMesh.rotation.y = t * 0.04;
 
-  if (isArtemisLive && artemisPosKm && moonPosKm) {
-    const SCENE_SCALE = 7.0 / 384400;
-    moonMesh.position.set(
-      earthMesh.position.x + (moonPosKm.x * SCENE_SCALE),
-      earthMesh.position.y + (moonPosKm.z * SCENE_SCALE),
-      earthMesh.position.z - (moonPosKm.y * SCENE_SCALE)
-    );
-    const artFrac = Math.min(1, Math.max(0, artemisPosKm.dist / moonPosKm.dist));
-    artemisMesh.position.lerpVectors(earthMesh.position, moonMesh.position, artFrac);
-  } else {
-    moonMesh.position.set(
-      earthMesh.position.x+7.0,
-      earthMesh.position.y+0.5,
-      earthMesh.position.z+2.5
-    );
-    const artFrac=Math.min(1,Math.max(0,artemisDistFromEarthKm/EARTH_MOON_KM));
-    artemisMesh.position.lerpVectors(earthMesh.position,moonMesh.position,artFrac);
-    artemisMesh.position.y+=Math.sin(artFrac*Math.PI)*0.35;
-  }
+  // Slow moon orbit around Earth
+  moonMesh.position.set(
+    earthMesh.position.x + Math.cos(t * 0.08) * 7.0,
+    earthMesh.position.y + 0.5,
+    earthMesh.position.z + Math.sin(t * 0.08) * 7.0
+  );
 
   renderer.render(scene,cam);
 }
